@@ -5,66 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SGT - Guardião Logístico Pro</title>
   
-  <!-- UI Frameworks (Bootstrap 5.3 + FontAwesome 6.4 + Inter Font) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- SheetJS para leitura de arquivos Excel (.xlsx / .csv) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --bg-body: #0f172a;
       --card-bg: #1e293b;
       --card-border: #334155;
       --accent-blue: #3b82f6;
       --accent-indigo: #6366f1;
       --accent-green: #10b981;
       --accent-amber: #f59e0b;
-      --text-primary: #f8fafc;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
 
     body {
-      background: var(--bg-gradient);
-      color: var(--text-primary);
+      background: var(--bg-body);
+      color: var(--text-main);
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
       padding-bottom: 60px;
     }
 
-    /* HEADER ELEGANTE */
     .app-header {
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 16px 32px;
+      background: #020617;
+      border-bottom: 1px solid #1e293b;
+      padding: 18px 32px;
       margin-bottom: 28px;
     }
 
     .brand-title {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 800;
+      color: #ffffff;
       letter-spacing: -0.5px;
-      background: linear-gradient(to right, #60a5fa, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
-    /* CARDS DESIGN PRO */
-    .pro-card {
+    .card-pro {
       background-color: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 14px;
       padding: 24px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-      transition: border-color 0.2s ease;
-    }
-
-    .pro-card:hover {
-      border-color: #475569;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
     }
 
     .step-badge {
@@ -78,7 +64,6 @@
       justify-content: center;
       font-weight: 800;
       font-size: 1rem;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
 
     .form-label-pro {
@@ -98,22 +83,15 @@
       font-weight: 600;
       border-radius: 8px;
       padding: 10px 14px;
-      transition: all 0.2s ease;
     }
 
     .form-control-pro:focus {
       background-color: #0f172a;
       color: #ffffff;
       border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 
-    .form-control-pro[readonly] {
-      background-color: #090d16;
-      border-color: #1e293b;
-    }
-
-    /* DROPZONE CUSTOM */
     .dropzone-pro {
       border: 2px dashed #475569;
       background-color: #0f172a;
@@ -121,24 +99,22 @@
       padding: 24px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
     }
 
     .dropzone-pro:hover {
       border-color: var(--accent-blue);
       background-color: #111827;
-      transform: translateY(-2px);
     }
 
-    /* TABELA DE PRODUTOS */
     .table-pro {
-      color: var(--text-primary);
+      color: var(--text-main);
       margin-bottom: 0;
     }
 
     .table-pro th {
       background-color: #0f172a;
-      color: #94a3b8;
+      color: #38bdf8;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -153,54 +129,46 @@
       vertical-align: middle;
     }
 
-    .photo-preview-thumb {
-      width: 44px;
-      height: 44px;
+    .photo-thumb {
+      width: 42px;
+      height: 42px;
       object-fit: cover;
       border-radius: 8px;
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--accent-blue);
       margin-right: 4px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
-    .badge-status-pro {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.75rem;
-    }
-
-    .btn-gradient-green {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    .btn-green-pro {
+      background: #10b981;
       color: white;
       border: none;
       font-weight: 700;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-      transition: all 0.2s ease;
+      padding: 10px 24px;
     }
 
-    .btn-gradient-green:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-    }
+    .btn-green-pro:hover { background: #059669; }
 
-    .btn-gradient-blue {
-      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    .btn-blue-pro {
+      background: #2563eb;
       color: white;
       border: none;
       font-weight: 700;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      padding: 12px 28px;
+    }
+
+    .btn-blue-pro:disabled {
+      background: #334155;
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-  <!-- CABEÇALHO -->
   <header class="app-header d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-3">
-      <div class="step-badge" style="width: 42px; height: 42px;">
+      <div class="step-badge" style="width:40px; height:40px;">
         <i class="fa-solid fa-boxes-packing fs-5"></i>
       </div>
       <div>
@@ -208,21 +176,21 @@
         <small class="text-muted fw-medium">Auditoria de Transferências & Rastreabilidade de Carga</small>
       </div>
     </div>
-    <div class="d-flex align-items-center gap-2">
+    <div>
       <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-3 py-2 rounded-pill fw-semibold">
-        <i class="fa-solid fa-circle-check me-1"></i> Google Sheets Conectado
+        <i class="fa-solid fa-circle-check me-1"></i> Google Sheets & Drive Conectados
       </span>
     </div>
   </header>
 
   <div class="container-fluid px-4" style="max-width: 1400px;">
 
-    <!-- PAINEL DE CONEXÃO E E-MAIL -->
-    <div class="pro-card py-3 mb-4">
+    <!-- PAINEL DE INTEGRAÇÃO -->
+    <div class="card-pro py-3 mb-4">
       <div class="row align-items-center g-3">
         <div class="col-md-5">
           <label class="form-label-pro"><i class="fa-solid fa-link text-info me-1"></i> URL do Web App (Google Apps Script):</label>
-          <input type="text" id="scriptUrlInput" class="form-control form-control-pro" placeholder="Cole aqui o link do Google Script (terminado em /exec)...">
+          <input type="text" id="scriptUrlInput" class="form-control form-control-pro" placeholder="Cole a URL do Google Script (terminado em /exec)...">
         </div>
         <div class="col-md-4">
           <label class="form-label-pro"><i class="fa-solid fa-envelope text-warning me-1"></i> E-mail de Notificação:</label>
@@ -237,7 +205,7 @@
     </div>
 
     <!-- ETAPA 1: IMPORTAÇÃO DO ERP -->
-    <div class="pro-card">
+    <div class="card-pro">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center gap-3">
           <div class="step-badge">1</div>
@@ -251,21 +219,19 @@
         </button>
       </div>
 
-      <!-- DROPZONE CARREGAMENTO -->
       <div class="dropzone-pro mb-4" onclick="document.getElementById('fileExcel').click()">
         <i class="fa-solid fa-file-excel text-primary fs-1 mb-2"></i>
-        <h6 class="fw-bold text-white mb-1">Clique para selecionar ou arraste a planilha (.xlsx / .csv)</h6>
-        <small class="text-muted" id="fileSelectedName">Formatos aceitos: Excel Workbook (.xlsx) ou CSV</small>
+        <h6 class="fw-bold text-white mb-1">Clique para selecionar a planilha (.xlsx / .csv)</h6>
+        <small class="text-muted" id="fileSelectedName">Planilha do ERP exportada</small>
         <input type="file" id="fileExcel" class="d-none" accept=".xlsx, .xls, .csv" onchange="mostrarNomeArquivo(this)">
       </div>
 
       <div class="text-center mb-4">
-        <button class="btn btn-gradient-green px-5 py-2 fs-6" onclick="processarArquivoXLSX()">
+        <button class="btn btn-green-pro px-5 py-2 fs-6" onclick="processarArquivoXLSX()">
           <i class="fa-solid fa-play me-2"></i> Iniciar Auditoria da Transferência
         </button>
       </div>
 
-      <!-- CABEÇALHO LIDO -->
       <div class="row g-3">
         <div class="col-md-4">
           <label class="form-label-pro">1. Nº Transferência / Guia (Coluna A):</label>
@@ -283,18 +249,18 @@
     </div>
 
     <!-- ETAPA 2: RECONFERÊNCIA E FOTOS -->
-    <div class="pro-card">
+    <div class="card-pro">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center gap-3">
           <div class="step-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: black;">2</div>
           <div>
             <h5 class="m-0 fw-bold text-white">Etapa 2. Evidência por Item (Almoxarife)</h5>
-            <small class="text-muted">Confira a quantidade física e anexe fotos das evidências para cada item</small>
+            <small class="text-muted">Confira a quantidade física e anexe fotos de evidência por item (até 5 fotos)</small>
           </div>
         </div>
         <div class="d-flex align-items-center gap-2">
           <span id="badgeTotalItens" class="badge bg-secondary bg-opacity-30 border border-secondary border-opacity-30 px-3 py-2">Total Itens: 0</span>
-          <span id="badgeStatusAudit" class="badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30">Pendente 100% Fotos & Contagem</span>
+          <span id="badgeStatusAudit" class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 px-3 py-2 fw-bold">Pendente 100% Fotos & Contagem</span>
         </div>
       </div>
 
@@ -324,15 +290,13 @@
       </div>
 
       <div class="text-end mt-4">
-        <button id="btnConcluirEtapa2" class="btn btn-gradient-blue px-4 py-2 fs-6" disabled onclick="concluirSeparacaoAlmoxarife()">
+        <button id="btnConcluirEtapa2" class="btn btn-blue-pro px-4 py-2 fs-6" disabled onclick="concluirSeparacaoAlmoxarife()">
           <i class="fa-solid fa-circle-check me-2"></i> Concluir Separação (Ir p/ Embarque)
         </button>
       </div>
     </div>
 
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     let itensCarregados = [];
@@ -346,7 +310,7 @@
 
     function mostrarNomeArquivo(input) {
       if (input.files && input.files[0]) {
-        document.getElementById('fileSelectedName').innerHTML = `<span class="text-info fw-bold"><i class="fa-solid fa-file-csv me-1"></i> ${input.files[0].name}</span>`;
+        document.getElementById('fileSelectedName').innerHTML = `<span class="text-info fw-bold"><i class="fa-solid fa-file-excel me-1"></i> ${input.files[0].name}</span>`;
       }
     }
 
@@ -496,9 +460,9 @@
       itensCarregados.forEach((item, index) => {
         const tr = document.createElement('tr');
         
-        let statusIcon = '<i class="fa-solid fa-circle-xmark text-danger fs-5" title="Pendente"></i>';
+        let statusIcon = '<i class="fa-solid fa-circle-xmark text-danger fs-5"></i>';
         if (item.qtdConferida !== "" && item.fotos.length > 0) {
-          statusIcon = '<i class="fa-solid fa-circle-check text-success fs-5" title="Auditado OK"></i>';
+          statusIcon = '<i class="fa-solid fa-circle-check text-success fs-5"></i>';
         }
 
         tr.innerHTML = `
@@ -520,7 +484,7 @@
                 <i class="fa-solid fa-camera me-1"></i> Foto
               </button>
               <div id="previewContainer_${index}" class="d-flex overflow-auto">
-                ${item.fotos.map(f => `<img src="${f}" class="photo-preview-thumb">`).join('')}
+                ${item.fotos.map(f => `<img src="${f}" class="photo-thumb">`).join('')}
               </div>
             </div>
           </td>
@@ -569,11 +533,11 @@
 
       if (todosValidos) {
         btnConcluir.removeAttribute('disabled');
-        badgeStatus.className = "badge-status-pro bg-success bg-opacity-20 text-success border border-success border-opacity-30";
+        badgeStatus.className = "badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-3 py-2 fw-bold";
         badgeStatus.innerText = "100% Auditado com Fotos (Pronto p/ Envio)";
       } else {
         btnConcluir.setAttribute('disabled', 'disabled');
-        badgeStatus.className = "badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30";
+        badgeStatus.className = "badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 px-3 py-2 fw-bold";
         badgeStatus.innerText = "Pendente 100% Fotos & Contagem";
       }
     }
@@ -589,11 +553,10 @@
       };
 
       if (!scriptUrl) {
-        alert("Para gravar no Google Sheets, cole a URL do seu Google Apps Script no campo do topo do aplicativo!");
+        alert("Atenção: Cole a URL do seu Google Apps Script no topo do aplicativo para enviar os dados e salvar as fotos no Google Drive!");
         return;
       }
 
-      // Envio via FETCH API para o Google Sheets Backend
       fetch(scriptUrl, {
         method: 'POST',
         mode: 'no-cors',
@@ -601,10 +564,10 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        alert("SUCESSO: Separação concluída e dados enviados para a sua planilha do Google Sheets!");
+        alert("SUCESSO: Auditoria finalizada! As fotos foram salvas no Google Drive e a planilha do Sheets foi atualizada!");
       })
       .catch((err) => {
-        alert("Erro ao enviar dados para o Google Sheets: " + err.message);
+        alert("Erro ao enviar dados: " + err.message);
       });
     }
   </script>
