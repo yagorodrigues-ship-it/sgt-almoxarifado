@@ -146,6 +146,7 @@
 </head>
 <body>
 
+  <!-- CABEÇALHO -->
   <header class="top-bar d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-3">
       <div class="step-badge" style="width:42px; height:42px;">
@@ -184,7 +185,7 @@
       </div>
     </div>
 
-    <!-- TABS -->
+    <!-- TABS DE NAVEGAÇÃO -->
     <ul class="nav nav-pills mb-4" id="mainTabs" role="tablist">
       <li class="nav-item">
         <button class="nav-link active me-2" id="tab-almoxarife" data-bs-toggle="pill" data-bs-target="#panel-almoxarife" type="button">
@@ -205,7 +206,7 @@
 
     <div class="tab-content" id="mainTabsContent">
 
-      <!-- TELA 1 -->
+      <!-- TELA 1: ALMOXARIFE -->
       <div class="tab-pane fade show active" id="panel-almoxarife" role="tabpanel">
         <div class="pro-card">
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -620,7 +621,6 @@
       itensCarregados[index].observacao = val;
     }
 
-    // COMPRESSÃO RIGOROSA: REDUZ FOTO PARA ~40KB CADA
     function adicionarFoto(index, input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -632,7 +632,7 @@
             const canvas = document.createElement('canvas');
             let width = img.width;
             let height = img.height;
-            const max_size = 500; // Máxima otimização leve
+            const max_size = 500;
 
             if (width > height) {
               if (width > max_size) {
@@ -701,11 +701,8 @@
       };
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
-
-      // Bloqueia botão para evitar duplo clique
       document.getElementById('btnConcluirEtapa2').disabled = true;
 
-      // Envio Fetch ultraleve com timeout amigável
       fetch(scriptUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -713,7 +710,7 @@
       })
       .then(res => res.json())
       .then(res => {
-        alert("SUCESSO: Transferência salva no Google Sheets e fotos enviadas para o Google Drive!");
+        alert("SUCESSO: Separação concluída, fotos salvas no Drive e dados gravados no Google Sheets!");
         limparTelaEAtualizar();
       })
       .catch((err) => {
