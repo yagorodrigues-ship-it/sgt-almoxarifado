@@ -171,7 +171,7 @@
       <div class="row align-items-center g-3">
         <div class="col-md-6">
           <label class="label-pro"><i class="fa-solid fa-link text-info me-1"></i> URL do Web App (Google Apps Script):</label>
-          <input type="text" id="scriptUrlInput" class="form-control input-pro" placeholder="Cole a URL do Google Script (terminado em /exec)..." onchange="salvarConfiguracoes()">
+          <input type="text" id="scriptUrlInput" class="form-control input-pro" placeholder="Cole a URL limpa do Google Script (terminado em /exec)..." onchange="limparESalvarUrl()">
         </div>
         <div class="col-md-4">
           <label class="label-pro"><i class="fa-solid fa-envelope text-warning me-1"></i> E-mail Notificação:</label>
@@ -298,10 +298,10 @@
         </div>
       </div>
 
-      <!-- TELA 2: EXPEDIÇÃO / MOTORISTA -->
+      <!-- TELA 2: EXPEDIÇÃO -->
       <div class="tab-pane fade" id="panel-expedicao" role="tabpanel">
         <div class="pro-card">
-          <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-truck-ramp-box text-warning me-2"></i>Liberação de Carga & Transporte (Segunda a Quarta)</h5>
+          <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-truck-ramp-box text-warning me-2"></i>Liberação de Carga & Transporte</h5>
           
           <div class="row g-3 mb-3">
             <div class="col-md-4">
@@ -320,7 +320,7 @@
 
           <div class="row g-3 mb-4">
             <div class="col-md-4">
-              <label class="label-pro">Quantidade de Volumes (Caixas/Pallets):</label>
+              <label class="label-pro">Quantidade de Volumes:</label>
               <input type="number" id="expVolumes" class="form-control input-pro" placeholder="Ex: 12">
             </div>
             <div class="col-md-8">
@@ -335,10 +335,10 @@
         </div>
       </div>
 
-      <!-- TELA 3: ADM / ROMANEIO -->
+      <!-- TELA 3: ROMANEIO -->
       <div class="tab-pane fade" id="panel-romaneio" role="tabpanel">
         <div class="pro-card">
-          <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-file-signature text-info me-2"></i>Comprovação de Romaneio Assinado (Sexta-feira)</h5>
+          <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-file-signature text-info me-2"></i>Comprovação de Romaneio Assinado</h5>
           
           <div class="row g-3 mb-4">
             <div class="col-md-4">
@@ -363,7 +363,7 @@
 
     </div>
 
-    <!-- HISTÓRICO LOCAL E PASTA DE LANÇAMENTOS -->
+    <!-- HISTÓRICO LOCAL -->
     <div class="pro-card mt-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="m-0 fw-bold text-white"><i class="fa-solid fa-folder-closed text-success me-2"></i>Pasta de Histórico de Lançamentos</h5>
@@ -413,6 +413,14 @@
       restaurarConfiguracoes();
       renderizarHistorico();
     });
+
+    function limparESalvarUrl() {
+      let urlInput = document.getElementById('scriptUrlInput');
+      // Tratamento automático: Remove colchetes, aspas e espaços acidentais
+      let urlLimpa = urlInput.value.trim().replace(/^\[/, '').replace(/\]$/, '').replace(/^"/, '').replace(/"$/, '').trim();
+      urlInput.value = urlLimpa;
+      salvarConfiguracoes();
+    }
 
     function salvarConfiguracoes() {
       localStorage.setItem('sgt_script_url', document.getElementById('scriptUrlInput').value.trim());
@@ -645,6 +653,7 @@
     }
 
     function concluirSeparacaoAlmoxarife() {
+      limparESalvarUrl();
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
       const emailNotif = document.getElementById('emailNotificacao').value.trim();
 
@@ -661,10 +670,11 @@
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
+      // Envio com charset explícito para garantir compatibilidade
       fetch(scriptUrl, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       })
       .then(() => {
@@ -748,6 +758,7 @@
     }
 
     function salvarExpedicao() {
+      limparESalvarUrl();
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
       const transfNum = document.getElementById('expTransfNumber').value.trim();
       const motorista = document.getElementById('expMotorista').value.trim();
@@ -770,12 +781,13 @@
         emailNotificacao: document.getElementById('emailNotificacao').value
       };
 
-      fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+      fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
       .then(() => alert("Expedição registrada no Google Sheets!"))
       .catch(() => alert("Atualizado com sucesso!"));
     }
 
     function salvarRomaneio() {
+      limparESalvarUrl();
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
       const transfNum = document.getElementById('romTransfNumber').value.trim();
       const resp = document.getElementById('romResp').value.trim();
@@ -794,7 +806,7 @@
         emailNotificacao: document.getElementById('emailNotificacao').value
       };
 
-      fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+      fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
       .then(() => alert("Romaneio anexado e processo concluído!"))
       .catch(() => alert("Concluído com sucesso!"));
     }
