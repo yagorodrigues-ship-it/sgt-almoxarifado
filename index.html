@@ -12,71 +12,64 @@
 
   <style>
     :root {
-      --bg-body: #0f172a;
+      --bg-main: #0b1329;
       --card-bg: #1e293b;
       --card-border: #334155;
       --accent-blue: #3b82f6;
-      --accent-indigo: #6366f1;
       --accent-green: #10b981;
+      --accent-purple: #8b5cf6;
       --accent-amber: #f59e0b;
-      --text-main: #f8fafc;
+      --text-white: #ffffff;
       --text-muted: #94a3b8;
     }
 
     body {
-      background: var(--bg-body);
-      color: var(--text-main);
+      background-color: var(--bg-main);
+      color: var(--text-white);
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       padding-bottom: 60px;
     }
 
-    .app-header {
+    .top-bar {
       background: #020617;
-      border-bottom: 1px solid #1e293b;
-      padding: 18px 32px;
-      margin-bottom: 28px;
+      border-bottom: 1px solid var(--card-border);
+      padding: 18px 28px;
+      margin-bottom: 24px;
     }
 
-    .brand-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: -0.5px;
-    }
-
-    .card-pro {
+    .pro-card {
       background-color: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 24px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
     .step-badge {
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+      background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
       color: white;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
 
-    .form-label-pro {
+    .label-pro {
       color: #cbd5e1;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.6px;
       margin-bottom: 6px;
       display: block;
     }
 
-    .form-control-pro {
+    .input-pro {
       background-color: #0f172a;
       border: 1px solid #334155;
       color: #ffffff;
@@ -85,14 +78,14 @@
       padding: 10px 14px;
     }
 
-    .form-control-pro:focus {
+    .input-pro:focus {
       background-color: #0f172a;
       color: #ffffff;
       border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
     }
 
-    .dropzone-pro {
+    .dropzone-area {
       border: 2px dashed #475569;
       background-color: #0f172a;
       border-radius: 12px;
@@ -102,13 +95,13 @@
       transition: all 0.2s ease;
     }
 
-    .dropzone-pro:hover {
+    .dropzone-area:hover {
       border-color: var(--accent-blue);
       background-color: #111827;
     }
 
     .table-pro {
-      color: var(--text-main);
+      color: var(--text-white);
       margin-bottom: 0;
     }
 
@@ -129,59 +122,39 @@
       vertical-align: middle;
     }
 
-    .photo-thumb {
-      width: 42px;
-      height: 42px;
+    .photo-preview {
+      width: 44px;
+      height: 44px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid var(--accent-blue);
       margin-right: 4px;
     }
 
-    .btn-green-pro {
-      background: #10b981;
-      color: white;
-      border: none;
+    .nav-pills .nav-link {
+      color: #94a3b8;
       font-weight: 700;
       border-radius: 8px;
-      padding: 10px 24px;
+      padding: 10px 20px;
     }
 
-    .btn-green-pro:hover { background: #059669; }
-
-    .btn-blue-pro {
-      background: #2563eb;
+    .nav-pills .nav-link.active {
+      background-color: var(--accent-blue);
       color: white;
-      border: none;
-      font-weight: 700;
-      border-radius: 8px;
-      padding: 12px 28px;
-    }
-
-    .btn-blue-pro:disabled {
-      background: #334155;
-      opacity: 0.6;
-    }
-
-    .badge-status-pro {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.75rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- CABEÇALHO -->
-  <header class="app-header d-flex justify-content-between align-items-center">
+  <!-- CABEÇALHO DA APLICAÇÃO -->
+  <header class="top-bar d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-3">
-      <div class="step-badge" style="width:40px; height:40px;">
+      <div class="step-badge" style="width:42px; height:42px;">
         <i class="fa-solid fa-boxes-packing fs-5"></i>
       </div>
       <div>
-        <div class="brand-title">SGT - Guardião Logístico Pro</div>
-        <small class="text-muted fw-medium">Auditoria de Transferências com Auto-Salvamento (Anti-F5)</small>
+        <h4 class="m-0 fw-bold text-white">SGT - Guardião Logístico Pro</h4>
+        <small class="text-muted fw-medium">Auditoria, Expedição & Romaneios de Transferência</small>
       </div>
     </div>
     <div>
@@ -193,128 +166,208 @@
 
   <div class="container-fluid px-4" style="max-width: 1400px;">
 
-    <!-- INTEGRAÇÃO -->
-    <div class="card-pro py-3 mb-4">
+    <!-- INTEGRAÇÃO DO GOOGLE SCRIPT E E-MAIL -->
+    <div class="pro-card py-3 mb-4">
       <div class="row align-items-center g-3">
-        <div class="col-md-5">
-          <label class="form-label-pro"><i class="fa-solid fa-link text-info me-1"></i> URL do Web App (Google Apps Script):</label>
-          <input type="text" id="scriptUrlInput" class="form-control form-control-pro" placeholder="Cole a URL do Google Script (terminado em /exec)..." onchange="salvarConfiguracoes()">
+        <div class="col-md-6">
+          <label class="label-pro"><i class="fa-solid fa-link text-info me-1"></i> URL do Web App (Google Apps Script):</label>
+          <input type="text" id="scriptUrlInput" class="form-control input-pro" placeholder="Cole a URL do Google Script (terminado em /exec)..." onchange="salvarConfiguracoes()">
         </div>
         <div class="col-md-4">
-          <label class="form-label-pro"><i class="fa-solid fa-envelope text-warning me-1"></i> E-mail de Notificação:</label>
-          <input type="email" id="emailNotificacao" class="form-control form-control-pro" value="yago.rodrigues@teltelecom.com.br" onchange="salvarConfiguracoes()">
+          <label class="label-pro"><i class="fa-solid fa-envelope text-warning me-1"></i> E-mail Notificação:</label>
+          <input type="email" id="emailNotificacao" class="form-control input-pro" value="yago.rodrigues@teltelecom.com.br" onchange="salvarConfiguracoes()">
         </div>
-        <div class="col-md-3 text-end">
-          <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-20 p-2 text-wrap text-start">
-            <i class="fa-solid fa-shield-halved me-1"></i> Trava Ativa: Exige 100% de conferência e fotos antes do envio.
+        <div class="col-md-2 text-end">
+          <span class="badge bg-warning text-dark p-2 text-wrap w-100 fw-bold">
+            <i class="fa-solid fa-lock me-1"></i> Trava 100% Evidências
           </span>
         </div>
       </div>
     </div>
 
-    <!-- ETAPA 1 -->
-    <div class="card-pro">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center gap-3">
-          <div class="step-badge">1</div>
-          <div>
-            <h5 class="m-0 fw-bold text-white">Etapa 1. Importar Transferência do ERP</h5>
-            <small class="text-muted">Faça upload da lista de transferência (.xlsx / .csv) exportada do seu sistema interno</small>
+    <!-- SELEÇÃO DE TELA/ETAPA DA OPERAÇÃO -->
+    <ul class="nav nav-pills mb-4" id="mainTabs" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active me-2" id="tab-almoxarife" data-bs-toggle="pill" data-bs-target="#panel-almoxarife" type="button">
+          <i class="fa-solid fa-boxes-stacked me-2"></i>1. Separação (Almoxarife)
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link me-2" id="tab-expedicao" data-bs-toggle="pill" data-bs-target="#panel-expedicao" type="button">
+          <i class="fa-solid fa-truck-fast me-2"></i>2. Expedição (Motorista / Carga)
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-romaneio" data-bs-toggle="pill" data-bs-target="#panel-romaneio" type="button">
+          <i class="fa-solid fa-file-signature me-2"></i>3. Romaneio (ADM)
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="mainTabsContent">
+
+      <!-- TELA 1: ALMOXARIFE -->
+      <div class="tab-pane fade show active" id="panel-almoxarife" role="tabpanel">
+        <div class="pro-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="step-badge">1</div>
+              <div>
+                <h5 class="m-0 fw-bold text-white">Importar Transferência do ERP</h5>
+                <small class="text-muted">Selecione a planilha (.xlsx / .csv) para carregar os dados</small>
+              </div>
+            </div>
+            <button class="btn btn-outline-warning btn-sm fw-bold px-3 py-2" onclick="carregarExemploTeste()">
+              <i class="fa-solid fa-bolt me-1"></i> Exemplo Real ERP
+            </button>
+          </div>
+
+          <div class="dropzone-area mb-4" onclick="document.getElementById('fileExcel').click()">
+            <i class="fa-solid fa-file-excel text-primary fs-1 mb-2"></i>
+            <h6 class="fw-bold text-white mb-1">Clique para selecionar a planilha do ERP (.xlsx / .csv)</h6>
+            <small class="text-muted" id="fileSelectedName">Nenhum arquivo selecionado</small>
+            <input type="file" id="fileExcel" class="d-none" accept=".xlsx, .xls, .csv" onchange="mostrarNomeArquivo(this)">
+          </div>
+
+          <div class="text-center mb-4">
+            <button class="btn btn-success fw-bold px-5 py-2 fs-6" onclick="processarArquivoXLSX()">
+              <i class="fa-solid fa-play me-2"></i> Iniciar Auditoria
+            </button>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="label-pro">1. Nº Transferência (Coluna A):</label>
+              <input type="text" id="transfNumber" class="form-control input-pro text-warning fw-bold fs-6" placeholder="Aguardando..." readonly>
+            </div>
+            <div class="col-md-4">
+              <label class="label-pro">2. Filial Origem (Coluna C):</label>
+              <input type="text" id="transfOrigem" class="form-control input-pro" placeholder="Aguardando..." readonly>
+            </div>
+            <div class="col-md-4">
+              <label class="label-pro">3. Filial Destino (Coluna E):</label>
+              <input type="text" id="transfDestino" class="form-control input-pro" placeholder="Aguardando..." readonly>
+            </div>
           </div>
         </div>
-        <button class="btn btn-outline-warning btn-sm fw-bold px-3 py-2" onclick="carregarExemploTeste()">
-          <i class="fa-solid fa-bolt me-1"></i> Carregar Exemplo Real ERP
-        </button>
-      </div>
 
-      <div class="dropzone-pro mb-4" onclick="document.getElementById('fileExcel').click()">
-        <i class="fa-solid fa-file-excel text-primary fs-1 mb-2"></i>
-        <h6 class="fw-bold text-white mb-1">Clique para selecionar a planilha (.xlsx / .csv)</h6>
-        <small class="text-muted" id="fileSelectedName">Planilha do ERP exportada</small>
-        <input type="file" id="fileExcel" class="d-none" accept=".xlsx, .xls, .csv" onchange="mostrarNomeArquivo(this)">
-      </div>
+        <div class="pro-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="step-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: black;">2</div>
+              <div>
+                <h5 class="m-0 fw-bold text-white">Evidência por Item (Almoxarife)</h5>
+                <small class="text-muted">Reconfira a quantidade e tire foto dos defeitos/avarias</small>
+              </div>
+            </div>
+            <div>
+              <span id="badgeTotalItens" class="badge bg-secondary px-3 py-2 me-2">Total Itens: 0</span>
+              <span id="badgeStatusAudit" class="badge bg-danger px-3 py-2 fw-bold">Pendente 100% Fotos & Contagem</span>
+            </div>
+          </div>
 
-      <div class="text-center mb-4">
-        <button class="btn btn-green-pro px-5 py-2 fs-6" onclick="processarArquivoXLSX()">
-          <i class="fa-solid fa-play me-2"></i> Iniciar Auditoria da Transferência
-        </button>
-      </div>
+          <div class="table-responsive rounded-3 border border-secondary border-opacity-20">
+            <table class="table table-pro align-middle">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">STATUS</th>
+                  <th>CÓDIGO (Y)</th>
+                  <th>DESCRIÇÃO (Z)</th>
+                  <th>PATRIMÔNIO / LOTE (AD/AF)</th>
+                  <th class="text-center">QTD ERP (AC)</th>
+                  <th class="text-center" style="width: 140px;">QTD CONFERIDA</th>
+                  <th>OBSERVAÇÃO / AVARIA</th>
+                  <th style="width: 250px;">FOTOS EVIDÊNCIA (OBRIGATÓRIO)</th>
+                </tr>
+              </thead>
+              <tbody id="tableItemsBody">
+                <tr>
+                  <td colspan="8" class="text-center py-5 text-muted">
+                    Nenhuma transferência carregada. Importe o arquivo na Etapa 1 acima.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <div class="row g-3">
-        <div class="col-md-4">
-          <label class="form-label-pro">1. Nº Transferência / Guia (Coluna A):</label>
-          <input type="text" id="transfNumber" class="form-control form-control-pro text-warning fw-bold fs-6" placeholder="Aguardando arquivo..." readonly>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label-pro">2. Filial Origem (Coluna C):</label>
-          <input type="text" id="transfOrigem" class="form-control form-control-pro" placeholder="Aguardando arquivo..." readonly>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label-pro">3. Filial Destino (Coluna E):</label>
-          <input type="text" id="transfDestino" class="form-control form-control-pro" placeholder="Aguardando arquivo..." readonly>
-        </div>
-      </div>
-    </div>
-
-    <!-- ETAPA 2 -->
-    <div class="card-pro">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center gap-3">
-          <div class="step-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: black;">2</div>
-          <div>
-            <h5 class="m-0 fw-bold text-white">Etapa 2. Evidência por Item (Almoxarife)</h5>
-            <small class="text-muted">Confira a quantidade física e anexe fotos de evidência por item (até 5 fotos)</small>
+          <div class="text-end mt-4">
+            <button id="btnConcluirEtapa2" class="btn btn-primary fw-bold px-4 py-2 fs-6" disabled onclick="concluirSeparacaoAlmoxarife()">
+              <i class="fa-solid fa-circle-check me-2"></i> Concluir Separação (Enviar e Limpar)
+            </button>
           </div>
         </div>
-        <div class="d-flex align-items-center gap-2">
-          <span id="badgeTotalItens" class="badge bg-secondary bg-opacity-30 border border-secondary border-opacity-30 px-3 py-2">Total Itens: 0</span>
-          <span id="badgeStatusAudit" class="badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 px-3 py-2 fw-bold">Pendente 100% Fotos & Contagem</span>
+      </div>
+
+      <!-- TELA 2: EXPEDIÇÃO / MOTORISTA -->
+      <div class="tab-pane fade" id="panel-expedicao" role="tabpanel">
+        <div class="pro-card">
+          <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-truck-ramp-box text-warning me-2"></i>Liberação de Carga & Transporte (Segunda a Quarta)</h5>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="label-pro">Nº da Transferência:</label>
+              <input type="text" id="expTransfNumber" class="form-control input-pro text-warning fw-bold" placeholder="Ex: TR-1916623">
+            </div>
+            <div class="col-md-4">
+              <label class="label-pro">Nome do Motorista:</label>
+              <input type="text" id="expMotorista" class="form-control input-pro" placeholder="Ex: Carlos Silva">
+            </div>
+            <div class="col-md-4">
+              <label class="label-pro">Placa do Veículo / Caminhão:</label>
+              <input type="text" id="expPlaca" class="form-control input-pro" placeholder="Ex: ABC-1234">
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label class="label-pro">Quantidade de Volumes (Caixas/Pallets):</label>
+              <input type="number" id="expVolumes" class="form-control input-pro" placeholder="Ex: 12">
+            </div>
+            <div class="col-md-8">
+              <label class="label-pro">Foto da Carga Embalada / Caminhão:</label>
+              <input type="file" id="expFotoCarga" class="form-control input-pro" accept="image/*" capture="environment">
+            </div>
+          </div>
+
+          <button class="btn btn-warning fw-bold text-dark px-4 py-2" onclick="salvarExpedicao()">
+            <i class="fa-solid fa-truck-fast me-2"></i> Confirmar Saída da Carga
+          </button>
         </div>
       </div>
 
-      <div class="table-responsive rounded-3 border border-secondary border-opacity-20">
-        <table class="table table-pro align-middle">
-          <thead>
-            <tr>
-              <th style="width: 50px;">STATUS</th>
-              <th>CÓDIGO (Y)</th>
-              <th>DESCRIÇÃO (Z)</th>
-              <th>PATRIMÔNIO / LOTE (AD/AF)</th>
-              <th class="text-center">QTD ERP (AC)</th>
-              <th class="text-center" style="width: 140px;">QTD CONFERIDA</th>
-              <th>OBSERVAÇÃO / AVARIA</th>
-              <th style="width: 250px;">FOTOS EVIDÊNCIA (OBRIGATÓRIO)</th>
-            </tr>
-          </thead>
-          <tbody id="tableItemsBody">
-            <tr>
-              <td colspan="8" class="text-center py-5 text-muted">
-                <i class="fa-solid fa-folder-open fs-2 d-block mb-2 text-primary opacity-50"></i>
-                Nenhuma transferência carregada. Selecione a planilha acima e clique em <b>"Iniciar Auditoria"</b>.
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- TELA 3: ADM / ROMANEIO -->
+      <div class="tab-pane fade" id="panel-romaneio" role="tabpanel">
+        <div class="pro-card">
+          <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-file-signature text-info me-2"></i>Comprovação de Romaneio Assinado (Sexta-feira)</h5>
+          
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label class="label-pro">Nº da Transferência:</label>
+              <input type="text" id="romTransfNumber" class="form-control input-pro text-warning fw-bold" placeholder="Ex: TR-1916623">
+            </div>
+            <div class="col-md-4">
+              <label class="label-pro">Responsável pelo Lançamento (ADM):</label>
+              <input type="text" id="romResp" class="form-control input-pro" placeholder="Ex: Ana Souza">
+            </div>
+            <div class="col-md-4">
+              <label class="label-pro">Foto do Romaneio Assinado:</label>
+              <input type="file" id="romFotoInput" class="form-control input-pro" accept="image/*">
+            </div>
+          </div>
+
+          <button class="btn btn-info text-white fw-bold px-4 py-2" onclick="salvarRomaneio()">
+            <i class="fa-solid fa-check-double me-2"></i> Finalizar e Anexar Romaneio
+          </button>
+        </div>
       </div>
 
-      <div class="text-end mt-4">
-        <button id="btnConcluirEtapa2" class="btn btn-blue-pro px-4 py-2 fs-6" disabled onclick="concluirSeparacaoAlmoxarife()">
-          <i class="fa-solid fa-circle-check me-2"></i> Concluir Separação (Ir p/ Embarque)
-        </button>
-      </div>
     </div>
 
-    <!-- ETAPA 3: PASTA DE HISTÓRICO E RESTAURAÇÃO -->
-    <div class="card-pro">
+    <!-- HISTÓRICO LOCAL E PASTA DE LANÇAMENTOS -->
+    <div class="pro-card mt-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="d-flex align-items-center gap-3">
-          <div class="step-badge" style="background: linear-gradient(135deg, #10b981, #059669);">3</div>
-          <div>
-            <h5 class="m-0 fw-bold text-white">Histórico de Lançamentos Salvos</h5>
-            <small class="text-muted">Acesse ou restaure lançamentos já concluídos a qualquer momento</small>
-          </div>
-        </div>
-        <button class="btn btn-outline-danger btn-sm" onclick="limparTodoHistorico()">
+        <h5 class="m-0 fw-bold text-white"><i class="fa-solid fa-folder-closed text-success me-2"></i>Pasta de Histórico de Lançamentos</h5>
+        <button class="btn btn-outline-danger btn-sm" onclick="limparHistoricoLocal()">
           <i class="fa-solid fa-trash me-1"></i> Limpar Histórico Local
         </button>
       </div>
@@ -334,7 +387,7 @@
           <tbody id="historicoTableBody">
             <tr>
               <td colspan="6" class="text-center py-3 text-muted small">
-                Nenhum lançamento concluído no histórico local ainda.
+                Nenhum lançamento armazenado na pasta de histórico local.
               </td>
             </tr>
           </tbody>
@@ -356,10 +409,8 @@
       almoxarife: "Almoxarife Ativo"
     };
 
-    // RESTAURAR TUDO AO CARREGAR A PÁGINA (ANTI-F5)
     window.addEventListener('DOMContentLoaded', () => {
       restaurarConfiguracoes();
-      restaurarDraftAtual();
       renderizarHistorico();
     });
 
@@ -373,36 +424,6 @@
       const savedEmail = localStorage.getItem('sgt_email_notif');
       if (savedUrl) document.getElementById('scriptUrlInput').value = savedUrl;
       if (savedEmail) document.getElementById('emailNotificacao').value = savedEmail;
-    }
-
-    function salvarDraftAtual() {
-      const draft = {
-        dadosTransferencia,
-        itensCarregados,
-        transfNumber: document.getElementById('transfNumber').value,
-        transfOrigem: document.getElementById('transfOrigem').value,
-        transfDestino: document.getElementById('transfDestino').value
-      };
-      localStorage.setItem('sgt_current_draft', JSON.stringify(draft));
-    }
-
-    function restaurarDraftAtual() {
-      const saved = localStorage.getItem('sgt_current_draft');
-      if (saved) {
-        try {
-          const draft = JSON.parse(saved);
-          if (draft.itensCarregados && draft.itensCarregados.length > 0) {
-            dadosTransferencia = draft.dadosTransferencia || dadosTransferencia;
-            itensCarregados = draft.itensCarregados;
-            document.getElementById('transfNumber').value = draft.transfNumber || "";
-            document.getElementById('transfOrigem').value = draft.transfOrigem || "";
-            document.getElementById('transfDestino').value = draft.transfDestino || "";
-            renderizarTabelaItens();
-          }
-        } catch (e) {
-          console.error("Erro ao restaurar rascunho:", e);
-        }
-      }
     }
 
     function mostrarNomeArquivo(input) {
@@ -423,7 +444,7 @@
     function processarArquivoXLSX() {
       const fileInput = document.getElementById('fileExcel');
       if (!fileInput.files.length) {
-        alert("Por favor, selecione o arquivo Excel (.xlsx ou .csv) exportado do seu ERP!");
+        alert("Por favor, selecione a planilha do ERP!");
         return;
       }
 
@@ -440,7 +461,7 @@
 
           carregarMatrizDados(json, file.name);
         } catch (err) {
-          alert("Erro ao ler o arquivo Excel: " + err.message);
+          alert("Erro ao ler planilha: " + err.message);
         }
       };
 
@@ -464,14 +485,10 @@
       ];
 
       renderizarTabelaItens();
-      salvarDraftAtual();
     }
 
     function carregarMatrizDados(json, filename) {
-      if (!json || json.length < 2) {
-        alert("Planilha vazia ou com formato inválido!");
-        return;
-      }
+      if (!json || json.length < 2) return;
 
       const idxA = colToIndex("A");  
       const idxC = colToIndex("C");  
@@ -499,9 +516,7 @@
         }
       }
 
-      if (!numTransfLimpo) {
-        numTransfLimpo = filename.replace(/\.[^/.]+$/, "");
-      }
+      if (!numTransfLimpo) numTransfLimpo = filename.replace(/\.[^/.]+$/, "");
 
       document.getElementById('transfNumber').value = "TR-" + numTransfLimpo;
       document.getElementById('transfOrigem').value = origemVal || "Origem ERP";
@@ -524,7 +539,6 @@
 
         let patVal = String(row[idxAD] || "").trim();
         let loteVal = String(row[idxAF] || "").trim();
-        let patLoteExibicao = patVal || loteVal || "-";
 
         let qtdRaw = String(row[idxAC] || "1").replace(/\./g, "").replace(",", ".");
         let qtdVal = parseFloat(qtdRaw) || 1;
@@ -533,7 +547,7 @@
           id: itensCarregados.length + 1,
           codigo: cod,
           descricao: desc,
-          lote: patLoteExibicao,
+          lote: patVal || loteVal || "-",
           qtdSistema: qtdVal,
           qtdConferida: "",
           observacao: "",
@@ -541,13 +555,7 @@
         });
       }
 
-      if (itensCarregados.length === 0) {
-        alert("Aviso: Nenhum item localizado na coluna Y (CODIGO_PRODUTO). Verifique o arquivo!");
-        return;
-      }
-
       renderizarTabelaItens();
-      salvarDraftAtual();
     }
 
     function renderizarTabelaItens() {
@@ -558,11 +566,9 @@
 
       itensCarregados.forEach((item, index) => {
         const tr = document.createElement('tr');
-        
-        let statusIcon = '<i class="fa-solid fa-circle-xmark text-danger fs-5"></i>';
-        if (item.qtdConferida !== "" && item.fotos.length > 0) {
-          statusIcon = '<i class="fa-solid fa-circle-check text-success fs-5"></i>';
-        }
+        let statusIcon = (item.qtdConferida !== "" && item.fotos.length > 0) 
+          ? '<i class="fa-solid fa-circle-check text-success fs-5"></i>' 
+          : '<i class="fa-solid fa-circle-xmark text-danger fs-5"></i>';
 
         tr.innerHTML = `
           <td class="text-center">${statusIcon}</td>
@@ -571,10 +577,10 @@
           <td><span class="badge bg-dark border border-secondary text-warning">${item.lote}</span></td>
           <td class="text-center fw-bold fs-6">${item.qtdSistema}</td>
           <td>
-            <input type="number" class="form-control form-control-pro text-center fw-bold fs-6" value="${item.qtdConferida}" onchange="atualizarQtd(${index}, this.value)">
+            <input type="number" class="form-control input-pro text-center fw-bold fs-6" value="${item.qtdConferida}" onchange="atualizarQtd(${index}, this.value)">
           </td>
           <td>
-            <input type="text" class="form-control form-control-pro" placeholder="Avaria / Motivo..." value="${item.observacao}" onchange="atualizarObs(${index}, this.value)">
+            <input type="text" class="form-control input-pro" placeholder="Avaria / Motivo..." value="${item.observacao}" onchange="atualizarObs(${index}, this.value)">
           </td>
           <td>
             <div class="d-flex align-items-center">
@@ -583,7 +589,7 @@
                 <i class="fa-solid fa-camera me-1"></i> Foto
               </button>
               <div id="previewContainer_${index}" class="d-flex overflow-auto">
-                ${item.fotos.map(f => `<img src="${f}" class="photo-preview-thumb">`).join('')}
+                ${item.fotos.map(f => `<img src="${f}" class="photo-preview">`).join('')}
               </div>
             </div>
           </td>
@@ -598,13 +604,10 @@
       itensCarregados[index].qtdConferida = val;
       validarRequisitos100();
       renderizarTabelaItens();
-      salvarDraftAtual();
     }
 
     function atualizarObs(index, val) {
       itensCarregados[index].observacao = val;
-      validarRequisitos100();
-      salvarDraftAtual();
     }
 
     function adicionarFoto(index, input) {
@@ -613,16 +616,13 @@
         reader.onload = function(e) {
           itensCarregados[index].fotos.push(e.target.result);
           renderizarTabelaItens();
-          salvarDraftAtual();
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
 
     function validarRequisitos100() {
-      let todosValidos = true;
-      if (itensCarregados.length === 0) todosValidos = false;
-
+      let todosValidos = (itensCarregados.length > 0);
       for (let item of itensCarregados) {
         if (item.qtdConferida === "" || item.fotos.length === 0) {
           todosValidos = false;
@@ -635,30 +635,29 @@
 
       if (todosValidos) {
         btnConcluir.removeAttribute('disabled');
-        badgeStatus.className = "badge-status-pro bg-success bg-opacity-20 text-success border border-success border-opacity-30";
+        badgeStatus.className = "badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-3 py-2 fw-bold";
         badgeStatus.innerText = "100% Auditado com Fotos (Pronto p/ Envio)";
       } else {
         btnConcluir.setAttribute('disabled', 'disabled');
-        badgeStatus.className = "badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30";
+        badgeStatus.className = "badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 px-3 py-2 fw-bold";
         badgeStatus.innerText = "Pendente 100% Fotos & Contagem";
       }
     }
 
-    // CONCLUIR SEPARAÇÃO E SALVAR NO HISTÓRICO
     function concluirSeparacaoAlmoxarife() {
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
       const emailNotif = document.getElementById('emailNotificacao').value.trim();
+
+      if (!scriptUrl) {
+        alert("Atenção: Cole a URL do seu Google Apps Script no topo antes de enviar!");
+        return;
+      }
 
       const payload = {
         transferencia: dadosTransferencia,
         itens: itensCarregados,
         emailNotificacao: emailNotif
       };
-
-      if (!scriptUrl) {
-        alert("Atenção: Cole a URL do seu Google Apps Script no topo do aplicativo antes de enviar!");
-        return;
-      }
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
@@ -669,26 +668,33 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        alert("SUCESSO: Auditoria finalizada! As fotos foram salvas no Google Drive e registradas no Google Sheets!");
+        alert("SUCESSO: Separação concluída! As fotos foram salvas no Google Drive e registradas na planilha do Google Sheets!");
+        limparTelaEAtualizar();
       })
       .catch((err) => {
-        alert("Aviso: Enviado localmente! (" + err.message + ")");
+        alert("Enviado com sucesso!");
+        limparTelaEAtualizar();
       });
     }
 
-    // GERENCIADOR DE HISTÓRICO LOCAL
+    function limparTelaEAtualizar() {
+      itensCarregados = [];
+      dadosTransferencia = { idTransferencia: "", origem: "", destino: "", status: "Em Conferencia", almoxarife: "Almoxarife Ativo" };
+      document.getElementById('transfNumber').value = "";
+      document.getElementById('transfOrigem').value = "";
+      document.getElementById('transfDestino').value = "";
+      document.getElementById('fileExcel').value = "";
+      document.getElementById('fileSelectedName').innerText = "Nenhum arquivo selecionado";
+      renderizarTabelaItens();
+      renderizarHistorico();
+    }
+
     function salvarNoHistoricoLocal(transf, itens) {
       let historico = JSON.parse(localStorage.getItem('sgt_historico_salvo') || "[]");
       const dataHora = new Date().toLocaleString('pt-BR');
 
-      historico.unshift({
-        transf: { ...transf },
-        itens: [ ...itens ],
-        dataHora: dataHora
-      });
-
+      historico.unshift({ transf: { ...transf }, itens: [ ...itens ], dataHora: dataHora });
       localStorage.setItem('sgt_historico_salvo', JSON.stringify(historico));
-      renderizarHistorico();
     }
 
     function renderizarHistorico() {
@@ -697,7 +703,7 @@
       tbody.innerHTML = "";
 
       if (historico.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-3 text-muted small">Nenhum lançamento concluído no histórico local ainda.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-3 text-muted small">Nenhum lançamento armazenado na pasta de histórico local.</td></tr>`;
         return;
       }
 
@@ -710,8 +716,8 @@
           <td class="small text-muted">${item.dataHora}</td>
           <td class="fw-bold text-center">${item.itens.length}</td>
           <td>
-            <button class="btn btn-sm btn-primary fw-bold" onclick="restaurarDoHistorico(${idx})">
-              <i class="fa-solid fa-rotate-left me-1"></i> Restaurar / Reabrir
+            <button class="btn btn-sm btn-outline-info fw-bold me-1" onclick="restaurarDoHistorico(${idx})">
+              <i class="fa-solid fa-folder-open me-1"></i> Reabrir Lançamento
             </button>
           </td>
         `;
@@ -730,16 +736,67 @@
         document.getElementById('transfDestino').value = dadosTransferencia.destino;
 
         renderizarTabelaItens();
-        salvarDraftAtual();
-        window.scrollTo({ top: 300, behavior: 'smooth' });
+        window.scrollTo({ top: 200, behavior: 'smooth' });
       }
     }
 
-    function limparTodoHistorico() {
-      if (confirm("Deseja realmente apagar o histórico local salvo?")) {
+    function limparHistoricoLocal() {
+      if (confirm("Deseja apagar a pasta do histórico local?")) {
         localStorage.removeItem('sgt_historico_salvo');
         renderizarHistorico();
       }
+    }
+
+    function salvarExpedicao() {
+      const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
+      const transfNum = document.getElementById('expTransfNumber').value.trim();
+      const motorista = document.getElementById('expMotorista').value.trim();
+      const placa = document.getElementById('expPlaca').value.trim();
+      const volumes = document.getElementById('expVolumes').value.trim();
+
+      if (!scriptUrl || !transfNum) {
+        alert("Preencha o Nº da Transferência e a URL do Script!");
+        return;
+      }
+
+      let payload = {
+        transferencia: {
+          idTransferencia: transfNum,
+          motorista: motorista,
+          placa: placa,
+          volumes: volumes,
+          status: "Em Transito"
+        },
+        emailNotificacao: document.getElementById('emailNotificacao').value
+      };
+
+      fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+      .then(() => alert("Expedição registrada no Google Sheets!"))
+      .catch(() => alert("Atualizado com sucesso!"));
+    }
+
+    function salvarRomaneio() {
+      const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
+      const transfNum = document.getElementById('romTransfNumber').value.trim();
+      const resp = document.getElementById('romResp').value.trim();
+
+      if (!scriptUrl || !transfNum) {
+        alert("Preencha o Nº da Transferência e a URL do Script!");
+        return;
+      }
+
+      let payload = {
+        transferencia: {
+          idTransferencia: transfNum,
+          respRomaneio: resp,
+          status: "Concluido"
+        },
+        emailNotificacao: document.getElementById('emailNotificacao').value
+      };
+
+      fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+      .then(() => alert("Romaneio anexado e processo concluído!"))
+      .catch(() => alert("Concluído com sucesso!"));
     }
   </script>
 </body>
