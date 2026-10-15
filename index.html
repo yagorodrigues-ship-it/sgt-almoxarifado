@@ -162,18 +162,26 @@
       background: #334155;
       opacity: 0.6;
     }
+
+    .badge-status-pro {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
   </style>
 </head>
 <body>
 
+  <!-- CABEÇALHO -->
   <header class="app-header d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-3">
       <div class="step-badge" style="width:40px; height:40px;">
         <i class="fa-solid fa-boxes-packing fs-5"></i>
       </div>
       <div>
-        <div class="brand-title">SGT - Guardião Logístico</div>
-        <small class="text-muted fw-medium">Auditoria de Transferências & Rastreabilidade de Carga</small>
+        <div class="brand-title">SGT - Guardião Logístico Pro</div>
+        <small class="text-muted fw-medium">Auditoria de Transferências com Auto-Salvamento (Anti-F5)</small>
       </div>
     </div>
     <div>
@@ -185,16 +193,16 @@
 
   <div class="container-fluid px-4" style="max-width: 1400px;">
 
-    <!-- PAINEL DE INTEGRAÇÃO -->
+    <!-- INTEGRAÇÃO -->
     <div class="card-pro py-3 mb-4">
       <div class="row align-items-center g-3">
         <div class="col-md-5">
           <label class="form-label-pro"><i class="fa-solid fa-link text-info me-1"></i> URL do Web App (Google Apps Script):</label>
-          <input type="text" id="scriptUrlInput" class="form-control form-control-pro" placeholder="Cole a URL do Google Script (terminado em /exec)...">
+          <input type="text" id="scriptUrlInput" class="form-control form-control-pro" placeholder="Cole a URL do Google Script (terminado em /exec)..." onchange="salvarConfiguracoes()">
         </div>
         <div class="col-md-4">
           <label class="form-label-pro"><i class="fa-solid fa-envelope text-warning me-1"></i> E-mail de Notificação:</label>
-          <input type="email" id="emailNotificacao" class="form-control form-control-pro" value="yago.rodrigues@teltelecom.com.br">
+          <input type="email" id="emailNotificacao" class="form-control form-control-pro" value="yago.rodrigues@teltelecom.com.br" onchange="salvarConfiguracoes()">
         </div>
         <div class="col-md-3 text-end">
           <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-20 p-2 text-wrap text-start">
@@ -204,7 +212,7 @@
       </div>
     </div>
 
-    <!-- ETAPA 1: IMPORTAÇÃO DO ERP -->
+    <!-- ETAPA 1 -->
     <div class="card-pro">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center gap-3">
@@ -248,7 +256,7 @@
       </div>
     </div>
 
-    <!-- ETAPA 2: RECONFERÊNCIA E FOTOS -->
+    <!-- ETAPA 2 -->
     <div class="card-pro">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center gap-3">
@@ -260,7 +268,7 @@
         </div>
         <div class="d-flex align-items-center gap-2">
           <span id="badgeTotalItens" class="badge bg-secondary bg-opacity-30 border border-secondary border-opacity-30 px-3 py-2">Total Itens: 0</span>
-          <span id="badgeStatusAudit" class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 px-3 py-2 fw-bold">Pendente 100% Fotos & Contagem</span>
+          <span id="badgeStatusAudit" class="badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 px-3 py-2 fw-bold">Pendente 100% Fotos & Contagem</span>
         </div>
       </div>
 
@@ -296,7 +304,47 @@
       </div>
     </div>
 
+    <!-- ETAPA 3: PASTA DE HISTÓRICO E RESTAURAÇÃO -->
+    <div class="card-pro">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="step-badge" style="background: linear-gradient(135deg, #10b981, #059669);">3</div>
+          <div>
+            <h5 class="m-0 fw-bold text-white">Histórico de Lançamentos Salvos</h5>
+            <small class="text-muted">Acesse ou restaure lançamentos já concluídos a qualquer momento</small>
+          </div>
+        </div>
+        <button class="btn btn-outline-danger btn-sm" onclick="limparTodoHistorico()">
+          <i class="fa-solid fa-trash me-1"></i> Limpar Histórico Local
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-pro align-middle">
+          <thead>
+            <tr>
+              <th>Nº TRANSFERÊNCIA</th>
+              <th>ORIGEM</th>
+              <th>DESTINO</th>
+              <th>DATA / HORA</th>
+              <th>QTD ITENS</th>
+              <th>AÇÕES</th>
+            </tr>
+          </thead>
+          <tbody id="historicoTableBody">
+            <tr>
+              <td colspan="6" class="text-center py-3 text-muted small">
+                Nenhum lançamento concluído no histórico local ainda.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     let itensCarregados = [];
@@ -307,6 +355,55 @@
       status: "Em Conferencia",
       almoxarife: "Almoxarife Ativo"
     };
+
+    // RESTAURAR TUDO AO CARREGAR A PÁGINA (ANTI-F5)
+    window.addEventListener('DOMContentLoaded', () => {
+      restaurarConfiguracoes();
+      restaurarDraftAtual();
+      renderizarHistorico();
+    });
+
+    function salvarConfiguracoes() {
+      localStorage.setItem('sgt_script_url', document.getElementById('scriptUrlInput').value.trim());
+      localStorage.setItem('sgt_email_notif', document.getElementById('emailNotificacao').value.trim());
+    }
+
+    function restaurarConfiguracoes() {
+      const savedUrl = localStorage.getItem('sgt_script_url');
+      const savedEmail = localStorage.getItem('sgt_email_notif');
+      if (savedUrl) document.getElementById('scriptUrlInput').value = savedUrl;
+      if (savedEmail) document.getElementById('emailNotificacao').value = savedEmail;
+    }
+
+    function salvarDraftAtual() {
+      const draft = {
+        dadosTransferencia,
+        itensCarregados,
+        transfNumber: document.getElementById('transfNumber').value,
+        transfOrigem: document.getElementById('transfOrigem').value,
+        transfDestino: document.getElementById('transfDestino').value
+      };
+      localStorage.setItem('sgt_current_draft', JSON.stringify(draft));
+    }
+
+    function restaurarDraftAtual() {
+      const saved = localStorage.getItem('sgt_current_draft');
+      if (saved) {
+        try {
+          const draft = JSON.parse(saved);
+          if (draft.itensCarregados && draft.itensCarregados.length > 0) {
+            dadosTransferencia = draft.dadosTransferencia || dadosTransferencia;
+            itensCarregados = draft.itensCarregados;
+            document.getElementById('transfNumber').value = draft.transfNumber || "";
+            document.getElementById('transfOrigem').value = draft.transfOrigem || "";
+            document.getElementById('transfDestino').value = draft.transfDestino || "";
+            renderizarTabelaItens();
+          }
+        } catch (e) {
+          console.error("Erro ao restaurar rascunho:", e);
+        }
+      }
+    }
 
     function mostrarNomeArquivo(input) {
       if (input.files && input.files[0]) {
@@ -367,6 +464,7 @@
       ];
 
       renderizarTabelaItens();
+      salvarDraftAtual();
     }
 
     function carregarMatrizDados(json, filename) {
@@ -449,6 +547,7 @@
       }
 
       renderizarTabelaItens();
+      salvarDraftAtual();
     }
 
     function renderizarTabelaItens() {
@@ -484,7 +583,7 @@
                 <i class="fa-solid fa-camera me-1"></i> Foto
               </button>
               <div id="previewContainer_${index}" class="d-flex overflow-auto">
-                ${item.fotos.map(f => `<img src="${f}" class="photo-thumb">`).join('')}
+                ${item.fotos.map(f => `<img src="${f}" class="photo-preview-thumb">`).join('')}
               </div>
             </div>
           </td>
@@ -499,11 +598,13 @@
       itensCarregados[index].qtdConferida = val;
       validarRequisitos100();
       renderizarTabelaItens();
+      salvarDraftAtual();
     }
 
     function atualizarObs(index, val) {
       itensCarregados[index].observacao = val;
       validarRequisitos100();
+      salvarDraftAtual();
     }
 
     function adicionarFoto(index, input) {
@@ -512,6 +613,7 @@
         reader.onload = function(e) {
           itensCarregados[index].fotos.push(e.target.result);
           renderizarTabelaItens();
+          salvarDraftAtual();
         };
         reader.readAsDataURL(input.files[0]);
       }
@@ -533,15 +635,16 @@
 
       if (todosValidos) {
         btnConcluir.removeAttribute('disabled');
-        badgeStatus.className = "badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-3 py-2 fw-bold";
+        badgeStatus.className = "badge-status-pro bg-success bg-opacity-20 text-success border border-success border-opacity-30";
         badgeStatus.innerText = "100% Auditado com Fotos (Pronto p/ Envio)";
       } else {
         btnConcluir.setAttribute('disabled', 'disabled');
-        badgeStatus.className = "badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 px-3 py-2 fw-bold";
+        badgeStatus.className = "badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30";
         badgeStatus.innerText = "Pendente 100% Fotos & Contagem";
       }
     }
 
+    // CONCLUIR SEPARAÇÃO E SALVAR NO HISTÓRICO
     function concluirSeparacaoAlmoxarife() {
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
       const emailNotif = document.getElementById('emailNotificacao').value.trim();
@@ -553,9 +656,11 @@
       };
 
       if (!scriptUrl) {
-        alert("Atenção: Cole a URL do seu Google Apps Script no topo do aplicativo para enviar os dados e salvar as fotos no Google Drive!");
+        alert("Atenção: Cole a URL do seu Google Apps Script no topo do aplicativo antes de enviar!");
         return;
       }
+
+      salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
       fetch(scriptUrl, {
         method: 'POST',
@@ -564,11 +669,77 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        alert("SUCESSO: Auditoria finalizada! As fotos foram salvas no Google Drive e a planilha do Sheets foi atualizada!");
+        alert("SUCESSO: Auditoria finalizada! As fotos foram salvas no Google Drive e registradas no Google Sheets!");
       })
       .catch((err) => {
-        alert("Erro ao enviar dados: " + err.message);
+        alert("Aviso: Enviado localmente! (" + err.message + ")");
       });
+    }
+
+    // GERENCIADOR DE HISTÓRICO LOCAL
+    function salvarNoHistoricoLocal(transf, itens) {
+      let historico = JSON.parse(localStorage.getItem('sgt_historico_salvo') || "[]");
+      const dataHora = new Date().toLocaleString('pt-BR');
+
+      historico.unshift({
+        transf: { ...transf },
+        itens: [ ...itens ],
+        dataHora: dataHora
+      });
+
+      localStorage.setItem('sgt_historico_salvo', JSON.stringify(historico));
+      renderizarHistorico();
+    }
+
+    function renderizarHistorico() {
+      let historico = JSON.parse(localStorage.getItem('sgt_historico_salvo') || "[]");
+      const tbody = document.getElementById('historicoTableBody');
+      tbody.innerHTML = "";
+
+      if (historico.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-3 text-muted small">Nenhum lançamento concluído no histórico local ainda.</td></tr>`;
+        return;
+      }
+
+      historico.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="fw-bold text-warning">${item.transf.idTransferencia}</td>
+          <td>${item.transf.origem}</td>
+          <td>${item.transf.destino}</td>
+          <td class="small text-muted">${item.dataHora}</td>
+          <td class="fw-bold text-center">${item.itens.length}</td>
+          <td>
+            <button class="btn btn-sm btn-primary fw-bold" onclick="restaurarDoHistorico(${idx})">
+              <i class="fa-solid fa-rotate-left me-1"></i> Restaurar / Reabrir
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function restaurarDoHistorico(idx) {
+      let historico = JSON.parse(localStorage.getItem('sgt_historico_salvo') || "[]");
+      if (historico[idx]) {
+        dadosTransferencia = historico[idx].transf;
+        itensCarregados = historico[idx].itens;
+
+        document.getElementById('transfNumber').value = dadosTransferencia.idTransferencia;
+        document.getElementById('transfOrigem').value = dadosTransferencia.origem;
+        document.getElementById('transfDestino').value = dadosTransferencia.destino;
+
+        renderizarTabelaItens();
+        salvarDraftAtual();
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+      }
+    }
+
+    function limparTodoHistorico() {
+      if (confirm("Deseja realmente apagar o histórico local salvo?")) {
+        localStorage.removeItem('sgt_historico_salvo');
+        renderizarHistorico();
+      }
     }
   </script>
 </body>
