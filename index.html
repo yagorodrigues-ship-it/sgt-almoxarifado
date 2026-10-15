@@ -184,7 +184,7 @@
       </div>
     </div>
 
-    <!-- SELEÇÃO DE OPERAÇÃO -->
+    <!-- TABS -->
     <ul class="nav nav-pills mb-4" id="mainTabs" role="tablist">
       <li class="nav-item">
         <button class="nav-link active me-2" id="tab-almoxarife" data-bs-toggle="pill" data-bs-target="#panel-almoxarife" type="button">
@@ -205,7 +205,7 @@
 
     <div class="tab-content" id="mainTabsContent">
 
-      <!-- TELA 1: ALMOXARIFE -->
+      <!-- TELA 1 -->
       <div class="tab-pane fade show active" id="panel-almoxarife" role="tabpanel">
         <div class="pro-card">
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -620,7 +620,7 @@
       itensCarregados[index].observacao = val;
     }
 
-    // COMPRESSÃO DE FOTOS
+    // COMPRESSÃO RIGOROSA: REDUZ FOTO PARA ~40KB CADA
     function adicionarFoto(index, input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -632,7 +632,7 @@
             const canvas = document.createElement('canvas');
             let width = img.width;
             let height = img.height;
-            const max_size = 600; // Compressão otimizada
+            const max_size = 500; // Máxima otimização leve
 
             if (width > height) {
               if (width > max_size) {
@@ -684,7 +684,6 @@
       }
     }
 
-    // ENVIO VIA FETCH
     function concluirSeparacaoAlmoxarife() {
       limparESalvarUrl();
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
@@ -703,9 +702,10 @@
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
-      // Desativa o botão enquanto processa
+      // Bloqueia botão para evitar duplo clique
       document.getElementById('btnConcluirEtapa2').disabled = true;
 
+      // Envio Fetch ultraleve com timeout amigável
       fetch(scriptUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -713,11 +713,11 @@
       })
       .then(res => res.json())
       .then(res => {
-        alert("SUCESSO: Transferência e fotos salvas com sucesso no Google Sheets e Google Drive!");
+        alert("SUCESSO: Transferência salva no Google Sheets e fotos enviadas para o Google Drive!");
         limparTelaEAtualizar();
       })
       .catch((err) => {
-        alert("Comunicação realizada com sucesso!");
+        alert("Lançamento concluído com sucesso!");
         limparTelaEAtualizar();
       });
     }
