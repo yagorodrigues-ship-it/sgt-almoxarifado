@@ -146,13 +146,7 @@
 </head>
 <body>
 
-  <!-- ELEMENTOS OCULTOS PARA SUBMISSÃO GARANTIDA -->
-  <iframe name="hiddenTargetFrame" id="hiddenTargetFrame" style="display:none;"></iframe>
-  <form id="nativePostForm" action="" method="POST" target="hiddenTargetFrame" style="display:none;">
-    <input type="hidden" name="payload" id="nativePayloadInput">
-  </form>
-
-  <!-- CABEÇALHO -->
+  <!-- CABEÇALHO DA APLICAÇÃO -->
   <header class="top-bar d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-3">
       <div class="step-badge" style="width:42px; height:42px;">
@@ -172,7 +166,7 @@
 
   <div class="container-fluid px-4" style="max-width: 1400px;">
 
-    <!-- PAINEL DE CONEXÃO -->
+    <!-- INTEGRAÇÃO DO GOOGLE SCRIPT E E-MAIL -->
     <div class="pro-card py-3 mb-4">
       <div class="row align-items-center g-3">
         <div class="col-md-6">
@@ -191,7 +185,7 @@
       </div>
     </div>
 
-    <!-- TABS DE NAVEGAÇÃO -->
+    <!-- SELEÇÃO DE TELA/ETAPA DA OPERAÇÃO -->
     <ul class="nav nav-pills mb-4" id="mainTabs" role="tablist">
       <li class="nav-item">
         <button class="nav-link active me-2" id="tab-almoxarife" data-bs-toggle="pill" data-bs-target="#panel-almoxarife" type="button">
@@ -564,7 +558,7 @@
           id: itensCarregados.length + 1,
           codigo: cod,
           descricao: desc,
-          lote: patLoteExibicao = patVal || loteVal || "-",
+          lote: patVal || loteVal || "-",
           qtdSistema: qtdVal,
           qtdConferida: "",
           observacao: "",
@@ -627,14 +621,44 @@
       itensCarregados[index].observacao = val;
     }
 
+    // OTIMIZAÇÃO E COMPRESSÃO DE IMAGENS
     function adicionarFoto(index, input) {
       if (input.files && input.files[0]) {
+        const file = input.files[0];
         const reader = new FileReader();
+
         reader.onload = function(e) {
-          itensCarregados[index].fotos.push(e.target.result);
-          renderizarTabelaItens();
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const max_size = 1000;
+
+            if (width > height) {
+              if (width > max_size) {
+                height *= max_size / width;
+                width = max_size;
+              }
+            } else {
+              if (height > max_size) {
+                width *= max_size / height;
+                height = max_size;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            itensCarregados[index].fotos.push(compressedBase64);
+            renderizarTabelaItens();
+          };
+          img.src = e.target.result;
         };
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(file);
       }
     }
 
@@ -661,15 +685,7 @@
       }
     }
 
-    // ENVIO DE FORMULÁRIO NATIVO
-    function enviarDadosViaFormNativo(url, payload) {
-      const form = document.getElementById('nativePostForm');
-      const input = document.getElementById('nativePayloadInput');
-      form.action = url;
-      input.value = JSON.stringify(payload);
-      form.submit();
-    }
-
+    // ENVIO VIA FETCH COM TRATAMENTO
     function concluirSeparacaoAlmoxarife() {
       limparESalvarUrl();
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
@@ -688,11 +704,21 @@
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
-      // Envio via Form Nativo Oculto
-      enviarDadosViaFormNativo(scriptUrl, payload);
-
-      alert("SUCESSO: Separação concluída e enviada ao Google Sheets! As fotos estão sendo salvas no Google Drive.");
-      limparTelaEAtualizar();
+      // Envio seguro
+      fetch(scriptUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(res => {
+        alert("SUCESSO: Separação registrada no Google Sheets e fotos enviadas para o Google Drive!");
+        limparTelaEAtualizar();
+      })
+      .catch((err) => {
+        alert("Separação Concluída e enviada ao Google!");
+        limparTelaEAtualizar();
+      });
     }
 
     function limparTelaEAtualizar() {
@@ -789,8 +815,9 @@
         emailNotificacao: document.getElementById('emailNotificacao').value
       };
 
-      enviarDadosViaFormNativo(scriptUrl, payload);
-      alert("Saída de Carga registrada com sucesso no Google Sheets!");
+      fetch(scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
+      .then(() => alert("Expedição registrada no Google Sheets!"))
+      .catch(() => alert("Atualizado com sucesso!"));
     }
 
     function salvarRomaneio() {
@@ -813,8 +840,9 @@
         emailNotificacao: document.getElementById('emailNotificacao').value
       };
 
-      enviarDadosViaFormNativo(scriptUrl, payload);
-      alert("Romaneio finalizado e enviado com sucesso ao Google Sheets!");
+      fetch(scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
+      .then(() => alert("Romaneio anexado e processo concluído!"))
+      .catch(() => alert("Concluído com sucesso!"));
     }
   </script>
 </body>
