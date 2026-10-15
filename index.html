@@ -146,7 +146,7 @@
 </head>
 <body>
 
-  <!-- ELEMENTOS OCULTOS PARA ENVIO DIRETO SEM BLOQUEIO -->
+  <!-- ELEMENTOS OCULTOS PARA ENVIO SEGURO NATIVO -->
   <iframe name="hiddenTargetFrame" id="hiddenTargetFrame" style="display:none;"></iframe>
   <form id="nativePostForm" action="" method="POST" target="hiddenTargetFrame" style="display:none;">
     <input type="hidden" name="payload" id="nativePayloadInput">
@@ -211,7 +211,7 @@
 
     <div class="tab-content" id="mainTabsContent">
 
-      <!-- TELA 1 -->
+      <!-- TELA 1: ALMOXARIFE -->
       <div class="tab-pane fade show active" id="panel-almoxarife" role="tabpanel">
         <div class="pro-card">
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -626,7 +626,6 @@
       itensCarregados[index].observacao = val;
     }
 
-    // COMPRESSÃO OTIMIZADA: REDUZ CADA FOTO PARA ~20KB A 30KB
     function adicionarFoto(index, input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -638,7 +637,7 @@
             const canvas = document.createElement('canvas');
             let width = img.width;
             let height = img.height;
-            const max_size = 400; // Tamanho ultra-leve
+            const max_size = 400;
 
             if (width > height) {
               if (width > max_size) {
@@ -690,7 +689,6 @@
       }
     }
 
-    // SUBMISSÃO NATIVA GARANTIDA
     function enviarDadosViaFormNativo(url, payload) {
       const form = document.getElementById('nativePostForm');
       const input = document.getElementById('nativePayloadInput');
@@ -717,10 +715,10 @@
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
-      // Envia via formulário nativo em IFrame oculto
+      // Envio via Form Nativo Oculto
       enviarDadosViaFormNativo(scriptUrl, payload);
 
-      alert("SUCESSO: Transferência e evidências registradas no Google Sheets e Google Drive!");
+      alert("SUCESSO: Transferência salva no Google Sheets e fotos enviadas para o Google Drive!");
       limparTelaEAtualizar();
     }
 
