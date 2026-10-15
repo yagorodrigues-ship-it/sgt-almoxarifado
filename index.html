@@ -146,12 +146,13 @@
 </head>
 <body>
 
-  <!-- ELEMENTOS OCULTOS PARA ENVIO DIRETO SEM BLOQUEIO -->
+  <!-- ELEMENTOS OCULTOS PARA SUBMISSÃO GARANTIDA -->
   <iframe name="hiddenTargetFrame" id="hiddenTargetFrame" style="display:none;"></iframe>
   <form id="nativePostForm" action="" method="POST" target="hiddenTargetFrame" style="display:none;">
     <input type="hidden" name="payload" id="nativePayloadInput">
   </form>
 
+  <!-- CABEÇALHO -->
   <header class="top-bar d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-3">
       <div class="step-badge" style="width:42px; height:42px;">
@@ -563,7 +564,7 @@
           id: itensCarregados.length + 1,
           codigo: cod,
           descricao: desc,
-          lote: patVal || loteVal || "-",
+          lote: patLoteExibicao = patVal || loteVal || "-",
           qtdSistema: qtdVal,
           qtdConferida: "",
           observacao: "",
@@ -660,7 +661,7 @@
       }
     }
 
-    // DISPARO DE FORMULÁRIO NATIVO IMPERMEÁVEL A BLOQUEIOS DE REDE (IFRAME)
+    // ENVIO DE FORMULÁRIO NATIVO
     function enviarDadosViaFormNativo(url, payload) {
       const form = document.getElementById('nativePostForm');
       const input = document.getElementById('nativePayloadInput');
@@ -687,10 +688,10 @@
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
-      // Envio NATIVO via Formulário para passar por qualquer firewall corporativo
+      // Envio via Form Nativo Oculto
       enviarDadosViaFormNativo(scriptUrl, payload);
 
-      alert("SUCESSO: Separação concluída e enviada ao Google Sheets! As fotos estão sendo salvas no Google Drive e a notificação foi disparada por e-mail.");
+      alert("SUCESSO: Separação concluída e enviada ao Google Sheets! As fotos estão sendo salvas no Google Drive.");
       limparTelaEAtualizar();
     }
 
