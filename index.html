@@ -3,104 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SGT - Guardião Logístico v1.0 GitHub Edition</title>
+  <title>SGT - Guardião Logístico Pro</title>
   
-  <!-- CSS Bootstrap 5 & FontAwesome -->
+  <!-- UI Frameworks (Bootstrap 5.3 + FontAwesome 6.4 + Inter Font) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <!-- Leitor Oficial SheetJS para arquivos do ERP (.xlsx / .csv) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- SheetJS para leitura de arquivos Excel (.xlsx / .csv) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
     :root {
-      --bg-dark: #0f172a;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       --card-bg: #1e293b;
-      --border-color: #334155;
-      --accent-blue: #2563eb;
+      --card-border: #334155;
+      --accent-blue: #3b82f6;
+      --accent-indigo: #6366f1;
       --accent-green: #10b981;
       --accent-amber: #f59e0b;
-      --text-white: #ffffff;
+      --text-primary: #f8fafc;
+      --text-muted: #94a3b8;
     }
 
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-white);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
       padding-bottom: 60px;
     }
 
-    .navbar-custom {
-      background-color: #020617;
-      border-bottom: 2px solid var(--accent-blue);
-      padding: 15px 20px;
+    /* HEADER ELEGANTE */
+    .app-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 32px;
+      margin-bottom: 28px;
     }
 
-    .card-panel {
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* CARDS DESIGN PRO */
+    .pro-card {
       background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
       padding: 24px;
       margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.2s ease;
     }
 
-    .label-bright {
-      color: #ffffff !important;
-      font-weight: 700 !important;
-      font-size: 0.85rem !important;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      display: block;
+    .pro-card:hover {
+      border-color: #475569;
     }
 
-    .input-dark {
-      background-color: #0f172a;
-      border: 1px solid #3b82f6;
-      color: #ffffff;
-      font-weight: 600;
-      border-radius: 6px;
-      padding: 10px 14px;
-    }
-
-    .input-dark:focus {
-      background-color: #0f172a;
-      color: #ffffff;
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.3);
-    }
-
-    .table-dark-custom {
-      color: var(--text-white);
-      background-color: #0f172a;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .table-dark-custom th {
-      background-color: #020617;
-      color: #38bdf8;
-      border-bottom: 2px solid var(--border-color);
-      padding: 14px 10px;
-      font-size: 0.85rem;
-    }
-
-    .table-dark-custom td {
-      border-bottom: 1px solid #1e293b;
-      vertical-align: middle;
-      padding: 12px 10px;
-    }
-
-    .photo-thumb {
-      width: 48px;
-      height: 48px;
-      object-fit: cover;
-      border-radius: 6px;
-      border: 1px solid var(--accent-blue);
-      margin-right: 6px;
-    }
-
-    .step-number {
-      background-color: var(--accent-blue);
+    .step-badge {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
       color: white;
       width: 36px;
       height: 36px;
@@ -109,96 +77,234 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      margin-right: 12px;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .form-label-pro {
+      color: #cbd5e1;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-control-pro {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 10px 14px;
+      transition: all 0.2s ease;
+    }
+
+    .form-control-pro:focus {
+      background-color: #0f172a;
+      color: #ffffff;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .form-control-pro[readonly] {
+      background-color: #090d16;
+      border-color: #1e293b;
+    }
+
+    /* DROPZONE CUSTOM */
+    .dropzone-pro {
+      border: 2px dashed #475569;
+      background-color: #0f172a;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .dropzone-pro:hover {
+      border-color: var(--accent-blue);
+      background-color: #111827;
+      transform: translateY(-2px);
+    }
+
+    /* TABELA DE PRODUTOS */
+    .table-pro {
+      color: var(--text-primary);
+      margin-bottom: 0;
+    }
+
+    .table-pro th {
+      background-color: #0f172a;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 12px;
+    }
+
+    .table-pro td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      vertical-align: middle;
+    }
+
+    .photo-preview-thumb {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      margin-right: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .badge-status-pro {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .btn-gradient-green {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      font-weight: 700;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-gradient-green:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-gradient-blue {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+      border: none;
+      font-weight: 700;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
   </style>
 </head>
 <body>
 
-  <!-- TOPO -->
-  <nav class="navbar navbar-expand-lg navbar-custom mb-4">
-    <div class="container-fluid">
-      <a class="navbar-brand text-white fw-bold d-flex align-items-center" href="#">
-        <i class="fa-solid fa-boxes-packing text-primary fs-2 me-3"></i>
-        <span>SGT - Guardião Logístico <small class="text-info fs-6">v1.0 (GitHub Edition)</small></span>
-      </a>
-      <span class="badge bg-success fs-6"><i class="fa-solid fa-cloud-arrow-up me-1"></i> GitHub Pages Ativo</span>
+  <!-- CABEÇALHO -->
+  <header class="app-header d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+      <div class="step-badge" style="width: 42px; height: 42px;">
+        <i class="fa-solid fa-boxes-packing fs-5"></i>
+      </div>
+      <div>
+        <div class="brand-title">SGT - Guardião Logístico</div>
+        <small class="text-muted fw-medium">Auditoria de Transferências & Rastreabilidade de Carga</small>
+      </div>
     </div>
-  </nav>
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-3 py-2 rounded-pill fw-semibold">
+        <i class="fa-solid fa-circle-check me-1"></i> Google Sheets Conectado
+      </span>
+    </div>
+  </header>
 
-  <div class="container-fluid px-4">
+  <div class="container-fluid px-4" style="max-width: 1400px;">
 
-    <!-- CONFIGURAÇÕES DE DESTINATÁRIO -->
-    <div class="card-panel py-3 mb-4">
-      <div class="row align-items-center">
+    <!-- PAINEL DE CONEXÃO E E-MAIL -->
+    <div class="pro-card py-3 mb-4">
+      <div class="row align-items-center g-3">
         <div class="col-md-5">
-          <label class="label-bright"><i class="fa-solid fa-envelope text-warning me-2"></i>E-mail Notificação (Destinatários):</label>
-          <input type="email" id="emailNotificacao" class="form-control input-dark" value="yago.rodrigues@teltelecom.com.br">
+          <label class="form-label-pro"><i class="fa-solid fa-link text-info me-1"></i> URL do Web App (Google Apps Script):</label>
+          <input type="text" id="scriptUrlInput" class="form-control form-control-pro" placeholder="Cole aqui o link do Google Script (terminado em /exec)...">
         </div>
-        <div class="col-md-7 text-end">
-          <span class="badge bg-warning text-dark fs-6 p-2 fw-bold">
-            <i class="fa-solid fa-lock me-1"></i> Trava Obligatória: Requer 100% de conferência e fotos antes do envio.
+        <div class="col-md-4">
+          <label class="form-label-pro"><i class="fa-solid fa-envelope text-warning me-1"></i> E-mail de Notificação:</label>
+          <input type="email" id="emailNotificacao" class="form-control form-control-pro" value="yago.rodrigues@teltelecom.com.br">
+        </div>
+        <div class="col-md-3 text-end">
+          <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-20 p-2 text-wrap text-start">
+            <i class="fa-solid fa-shield-halved me-1"></i> Trava Ativa: Exige 100% de conferência e fotos antes do envio.
           </span>
         </div>
       </div>
     </div>
 
     <!-- ETAPA 1: IMPORTAÇÃO DO ERP -->
-    <div class="card-panel">
+    <div class="pro-card">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center">
-          <span class="step-number">1</span>
-          <h5 class="m-0 text-white fw-bold"><i class="fa-solid fa-file-excel text-info me-2"></i>Etapa 1. Importar Transferência do ERP</h5>
+        <div class="d-flex align-items-center gap-3">
+          <div class="step-badge">1</div>
+          <div>
+            <h5 class="m-0 fw-bold text-white">Etapa 1. Importar Transferência do ERP</h5>
+            <small class="text-muted">Faça upload da lista de transferência (.xlsx / .csv) exportada do seu sistema interno</small>
+          </div>
         </div>
-        <button class="btn btn-warning text-dark fw-bold" onclick="carregarExemploTeste()">
-          <i class="fa-solid fa-bolt me-1"></i> Teste Rápido (Exemplo Real ERP)
+        <button class="btn btn-outline-warning btn-sm fw-bold px-3 py-2" onclick="carregarExemploTeste()">
+          <i class="fa-solid fa-bolt me-1"></i> Carregar Exemplo Real ERP
         </button>
       </div>
 
-      <div class="row g-3 align-items-end mb-3">
-        <div class="col-md-4">
-          <label class="label-bright">1. SELECIONE O ARQUIVO EXCEL DO ERP (.XLSX / .CSV):</label>
-          <input type="file" id="fileExcel" class="form-control input-dark" accept=".xlsx, .xls, .csv">
-        </div>
-        <div class="col-md-3">
-          <label class="label-bright">2. Nº TRANSFERÊNCIA (COL A):</label>
-          <input type="text" id="transfNumber" class="form-control input-dark fw-bold text-warning fs-5" placeholder="Aguardando..." readonly>
-        </div>
-        <div class="col-md-2">
-          <label class="label-bright">3. ORIGEM (COL C):</label>
-          <input type="text" id="transfOrigem" class="form-control input-dark" placeholder="Aguardando..." readonly>
-        </div>
-        <div class="col-md-3">
-          <label class="label-bright">4. DESTINO (COL E):</label>
-          <input type="text" id="transfDestino" class="form-control input-dark" placeholder="Aguardando..." readonly>
-        </div>
+      <!-- DROPZONE CARREGAMENTO -->
+      <div class="dropzone-pro mb-4" onclick="document.getElementById('fileExcel').click()">
+        <i class="fa-solid fa-file-excel text-primary fs-1 mb-2"></i>
+        <h6 class="fw-bold text-white mb-1">Clique para selecionar ou arraste a planilha (.xlsx / .csv)</h6>
+        <small class="text-muted" id="fileSelectedName">Formatos aceitos: Excel Workbook (.xlsx) ou CSV</small>
+        <input type="file" id="fileExcel" class="d-none" accept=".xlsx, .xls, .csv" onchange="mostrarNomeArquivo(this)">
       </div>
 
-      <button class="btn btn-success w-100 fw-bold fs-5 py-2 mt-2" onclick="processarArquivoXLSX()">
-        <i class="fa-solid fa-play me-2"></i> Iniciar Auditoria da Transferência
-      </button>
+      <div class="text-center mb-4">
+        <button class="btn btn-gradient-green px-5 py-2 fs-6" onclick="processarArquivoXLSX()">
+          <i class="fa-solid fa-play me-2"></i> Iniciar Auditoria da Transferência
+        </button>
+      </div>
+
+      <!-- CABEÇALHO LIDO -->
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label-pro">1. Nº Transferência / Guia (Coluna A):</label>
+          <input type="text" id="transfNumber" class="form-control form-control-pro text-warning fw-bold fs-6" placeholder="Aguardando arquivo..." readonly>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-pro">2. Filial Origem (Coluna C):</label>
+          <input type="text" id="transfOrigem" class="form-control form-control-pro" placeholder="Aguardando arquivo..." readonly>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-pro">3. Filial Destino (Coluna E):</label>
+          <input type="text" id="transfDestino" class="form-control form-control-pro" placeholder="Aguardando arquivo..." readonly>
+        </div>
+      </div>
     </div>
 
     <!-- ETAPA 2: RECONFERÊNCIA E FOTOS -->
-    <div class="card-panel">
+    <div class="pro-card">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center">
-          <span class="step-number bg-warning text-dark">2</span>
-          <h5 class="m-0 text-white fw-bold"><i class="fa-solid fa-clipboard-check text-warning me-2"></i>Etapa 2. Evidência por Item (Almoxarife)</h5>
+        <div class="d-flex align-items-center gap-3">
+          <div class="step-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: black;">2</div>
+          <div>
+            <h5 class="m-0 fw-bold text-white">Etapa 2. Evidência por Item (Almoxarife)</h5>
+            <small class="text-muted">Confira a quantidade física e anexe fotos das evidências para cada item</small>
+          </div>
         </div>
-        <div>
-          <span id="badgeTotalItens" class="badge bg-secondary fs-6 me-2">Total Itens: 0</span>
-          <span id="badgeStatusAudit" class="badge bg-danger fs-6">Pendente 100% Fotos & Contagem</span>
+        <div class="d-flex align-items-center gap-2">
+          <span id="badgeTotalItens" class="badge bg-secondary bg-opacity-30 border border-secondary border-opacity-30 px-3 py-2">Total Itens: 0</span>
+          <span id="badgeStatusAudit" class="badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30">Pendente 100% Fotos & Contagem</span>
         </div>
       </div>
 
-      <div class="table-responsive">
-        <table class="table table-dark-custom align-middle">
+      <div class="table-responsive rounded-3 border border-secondary border-opacity-20">
+        <table class="table table-pro align-middle">
           <thead>
             <tr>
               <th style="width: 50px;">STATUS</th>
-              <th>CÓDIGO (COL Y)</th>
-              <th>DESCRIÇÃO (COL Z)</th>
+              <th>CÓDIGO (Y)</th>
+              <th>DESCRIÇÃO (Z)</th>
               <th>PATRIMÔNIO / LOTE (AD/AF)</th>
               <th class="text-center">QTD ERP (AC)</th>
               <th class="text-center" style="width: 140px;">QTD CONFERIDA</th>
@@ -208,9 +314,9 @@
           </thead>
           <tbody id="tableItemsBody">
             <tr>
-              <td colspan="8" class="text-center py-5 text-muted fs-5">
-                <i class="fa-solid fa-folder-open fs-1 d-block mb-3 text-info"></i>
-                Nenhuma transferência carregada. Selecione o arquivo Excel acima e clique em <b>"Iniciar Auditoria"</b>.
+              <td colspan="8" class="text-center py-5 text-muted">
+                <i class="fa-solid fa-folder-open fs-2 d-block mb-2 text-primary opacity-50"></i>
+                Nenhuma transferência carregada. Selecione a planilha acima e clique em <b>"Iniciar Auditoria"</b>.
               </td>
             </tr>
           </tbody>
@@ -218,7 +324,7 @@
       </div>
 
       <div class="text-end mt-4">
-        <button id="btnConcluirEtapa2" class="btn btn-primary fw-bold fs-5 px-5 py-2" disabled onclick="concluirSeparacaoAlmoxarife()">
+        <button id="btnConcluirEtapa2" class="btn btn-gradient-blue px-4 py-2 fs-6" disabled onclick="concluirSeparacaoAlmoxarife()">
           <i class="fa-solid fa-circle-check me-2"></i> Concluir Separação (Ir p/ Embarque)
         </button>
       </div>
@@ -238,6 +344,12 @@
       almoxarife: "Almoxarife Ativo"
     };
 
+    function mostrarNomeArquivo(input) {
+      if (input.files && input.files[0]) {
+        document.getElementById('fileSelectedName').innerHTML = `<span class="text-info fw-bold"><i class="fa-solid fa-file-csv me-1"></i> ${input.files[0].name}</span>`;
+      }
+    }
+
     function colToIndex(col) {
       let sum = 0;
       for (let i = 0; i < col.length; i++) {
@@ -250,7 +362,7 @@
     function processarArquivoXLSX() {
       const fileInput = document.getElementById('fileExcel');
       if (!fileInput.files.length) {
-        alert("Por favor, escolha o arquivo Excel exportado do seu ERP antes de iniciar!");
+        alert("Por favor, selecione o arquivo Excel (.xlsx ou .csv) exportado do seu ERP!");
         return;
       }
 
@@ -267,7 +379,7 @@
 
           carregarMatrizDados(json, file.name);
         } catch (err) {
-          alert("Erro ao processar arquivo: " + err.message);
+          alert("Erro ao ler o arquivo Excel: " + err.message);
         }
       };
 
@@ -295,7 +407,7 @@
 
     function carregarMatrizDados(json, filename) {
       if (!json || json.length < 2) {
-        alert("O arquivo selecionado está vazio!");
+        alert("Planilha vazia ou com formato inválido!");
         return;
       }
 
@@ -392,23 +504,23 @@
         tr.innerHTML = `
           <td class="text-center">${statusIcon}</td>
           <td class="fw-bold text-info">${item.codigo}</td>
-          <td>${item.descricao}</td>
-          <td><span class="badge bg-dark border text-warning fs-6">${item.lote}</span></td>
+          <td class="fw-medium">${item.descricao}</td>
+          <td><span class="badge bg-dark border border-secondary text-warning">${item.lote}</span></td>
           <td class="text-center fw-bold fs-6">${item.qtdSistema}</td>
           <td>
-            <input type="number" class="form-control input-dark text-center fw-bold fs-6" value="${item.qtdConferida}" onchange="atualizarQtd(${index}, this.value)">
+            <input type="number" class="form-control form-control-pro text-center fw-bold fs-6" value="${item.qtdConferida}" onchange="atualizarQtd(${index}, this.value)">
           </td>
           <td>
-            <input type="text" class="form-control input-dark" placeholder="Avaria / Motivo..." value="${item.observacao}" onchange="atualizarObs(${index}, this.value)">
+            <input type="text" class="form-control form-control-pro" placeholder="Avaria / Motivo..." value="${item.observacao}" onchange="atualizarObs(${index}, this.value)">
           </td>
           <td>
             <div class="d-flex align-items-center">
               <input type="file" id="photoInput_${index}" class="d-none" accept="image/*" capture="environment" onchange="adicionarFoto(${index}, this)">
-              <button class="btn btn-sm btn-outline-light me-2 fw-bold" onclick="document.getElementById('photoInput_${index}').click()">
-                <i class="fa-solid fa-camera text-warning me-1"></i> Foto
+              <button class="btn btn-sm btn-outline-warning fw-bold me-2" onclick="document.getElementById('photoInput_${index}').click()">
+                <i class="fa-solid fa-camera me-1"></i> Foto
               </button>
               <div id="previewContainer_${index}" class="d-flex overflow-auto">
-                ${item.fotos.map(f => `<img src="${f}" class="photo-thumb">`).join('')}
+                ${item.fotos.map(f => `<img src="${f}" class="photo-preview-thumb">`).join('')}
               </div>
             </div>
           </td>
@@ -457,17 +569,43 @@
 
       if (todosValidos) {
         btnConcluir.removeAttribute('disabled');
-        badgeStatus.className = "badge bg-success fs-6";
+        badgeStatus.className = "badge-status-pro bg-success bg-opacity-20 text-success border border-success border-opacity-30";
         badgeStatus.innerText = "100% Auditado com Fotos (Pronto p/ Envio)";
       } else {
         btnConcluir.setAttribute('disabled', 'disabled');
-        badgeStatus.className = "badge bg-danger fs-6";
+        badgeStatus.className = "badge-status-pro bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30";
         badgeStatus.innerText = "Pendente 100% Fotos & Contagem";
       }
     }
 
     function concluirSeparacaoAlmoxarife() {
-      alert("Separação Concluída e Gravada com Sucesso!");
+      const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
+      const emailNotif = document.getElementById('emailNotificacao').value.trim();
+
+      const payload = {
+        transferencia: dadosTransferencia,
+        itens: itensCarregados,
+        emailNotificacao: emailNotif
+      };
+
+      if (!scriptUrl) {
+        alert("Para gravar no Google Sheets, cole a URL do seu Google Apps Script no campo do topo do aplicativo!");
+        return;
+      }
+
+      // Envio via FETCH API para o Google Sheets Backend
+      fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        alert("SUCESSO: Separação concluída e dados enviados para a sua planilha do Google Sheets!");
+      })
+      .catch((err) => {
+        alert("Erro ao enviar dados para o Google Sheets: " + err.message);
+      });
     }
   </script>
 </body>
