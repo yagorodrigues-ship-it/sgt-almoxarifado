@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGT - Guardião Logístico v1.0 GitHub Edition</title>
+  
+  <!-- CSS Bootstrap 5 & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Leitor Oficial SheetJS para arquivos do ERP (.xlsx / .csv) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --border-color: #334155;
+      --accent-blue: #2563eb;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --text-white: #ffffff;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-bottom: 60px;
+    }
+
+    .navbar-custom {
+      background-color: #020617;
+      border-bottom: 2px solid var(--accent-blue);
+      padding: 15px 20px;
+    }
+
+    .card-panel {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .label-bright {
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      font-size: 0.85rem !important;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .input-dark {
+      background-color: #0f172a;
+      border: 1px solid #3b82f6;
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 10px 14px;
+    }
+
+    .input-dark:focus {
+      background-color: #0f172a;
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.3);
+    }
+
+    .table-dark-custom {
+      color: var(--text-white);
+      background-color: #0f172a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .table-dark-custom th {
+      background-color: #020617;
+      color: #38bdf8;
+      border-bottom: 2px solid var(--border-color);
+      padding: 14px 10px;
+      font-size: 0.85rem;
+    }
+
+    .table-dark-custom td {
+      border-bottom: 1px solid #1e293b;
+      vertical-align: middle;
+      padding: 12px 10px;
+    }
+
+    .photo-thumb {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--accent-blue);
+      margin-right: 6px;
+    }
+
+    .step-number {
+      background-color: var(--accent-blue);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPO -->
+  <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white fw-bold d-flex align-items-center" href="#">
+        <i class="fa-solid fa-boxes-packing text-primary fs-2 me-3"></i>
+        <span>SGT - Guardião Logístico <small class="text-info fs-6">v1.0 (GitHub Edition)</small></span>
+      </a>
+      <span class="badge bg-success fs-6"><i class="fa-solid fa-cloud-arrow-up me-1"></i> GitHub Pages Ativo</span>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4">
+
+    <!-- CONFIGURAÇÕES DE DESTINATÁRIO -->
+    <div class="card-panel py-3 mb-4">
+      <div class="row align-items-center">
+        <div class="col-md-5">
+          <label class="label-bright"><i class="fa-solid fa-envelope text-warning me-2"></i>E-mail Notificação (Destinatários):</label>
+          <input type="email" id="emailNotificacao" class="form-control input-dark" value="yago.rodrigues@teltelecom.com.br">
+        </div>
+        <div class="col-md-7 text-end">
+          <span class="badge bg-warning text-dark fs-6 p-2 fw-bold">
+            <i class="fa-solid fa-lock me-1"></i> Trava Obligatória: Requer 100% de conferência e fotos antes do envio.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETAPA 1: IMPORTAÇÃO DO ERP -->
+    <div class="card-panel">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+          <span class="step-number">1</span>
+          <h5 class="m-0 text-white fw-bold"><i class="fa-solid fa-file-excel text-info me-2"></i>Etapa 1. Importar Transferência do ERP</h5>
+        </div>
+        <button class="btn btn-warning text-dark fw-bold" onclick="carregarExemploTeste()">
+          <i class="fa-solid fa-bolt me-1"></i> Teste Rápido (Exemplo Real ERP)
+        </button>
+      </div>
+
+      <div class="row g-3 align-items-end mb-3">
+        <div class="col-md-4">
+          <label class="label-bright">1. SELECIONE O ARQUIVO EXCEL DO ERP (.XLSX / .CSV):</label>
+          <input type="file" id="fileExcel" class="form-control input-dark" accept=".xlsx, .xls, .csv">
+        </div>
+        <div class="col-md-3">
+          <label class="label-bright">2. Nº TRANSFERÊNCIA (COL A):</label>
+          <input type="text" id="transfNumber" class="form-control input-dark fw-bold text-warning fs-5" placeholder="Aguardando..." readonly>
+        </div>
+        <div class="col-md-2">
+          <label class="label-bright">3. ORIGEM (COL C):</label>
+          <input type="text" id="transfOrigem" class="form-control input-dark" placeholder="Aguardando..." readonly>
+        </div>
+        <div class="col-md-3">
+          <label class="label-bright">4. DESTINO (COL E):</label>
+          <input type="text" id="transfDestino" class="form-control input-dark" placeholder="Aguardando..." readonly>
+        </div>
+      </div>
+
+      <button class="btn btn-success w-100 fw-bold fs-5 py-2 mt-2" onclick="processarArquivoXLSX()">
+        <i class="fa-solid fa-play me-2"></i> Iniciar Auditoria da Transferência
+      </button>
+    </div>
+
+    <!-- ETAPA 2: RECONFERÊNCIA E FOTOS -->
+    <div class="card-panel">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+          <span class="step-number bg-warning text-dark">2</span>
+          <h5 class="m-0 text-white fw-bold"><i class="fa-solid fa-clipboard-check text-warning me-2"></i>Etapa 2. Evidência por Item (Almoxarife)</h5>
+        </div>
+        <div>
+          <span id="badgeTotalItens" class="badge bg-secondary fs-6 me-2">Total Itens: 0</span>
+          <span id="badgeStatusAudit" class="badge bg-danger fs-6">Pendente 100% Fotos & Contagem</span>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-dark-custom align-middle">
+          <thead>
+            <tr>
+              <th style="width: 50px;">STATUS</th>
+              <th>CÓDIGO (COL Y)</th>
+              <th>DESCRIÇÃO (COL Z)</th>
+              <th>PATRIMÔNIO / LOTE (AD/AF)</th>
+              <th class="text-center">QTD ERP (AC)</th>
+              <th class="text-center" style="width: 140px;">QTD CONFERIDA</th>
+              <th>OBSERVAÇÃO / AVARIA</th>
+              <th style="width: 250px;">FOTOS EVIDÊNCIA (OBRIGATÓRIO)</th>
+            </tr>
+          </thead>
+          <tbody id="tableItemsBody">
+            <tr>
+              <td colspan="8" class="text-center py-5 text-muted fs-5">
+                <i class="fa-solid fa-folder-open fs-1 d-block mb-3 text-info"></i>
+                Nenhuma transferência carregada. Selecione o arquivo Excel acima e clique em <b>"Iniciar Auditoria"</b>.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-end mt-4">
+        <button id="btnConcluirEtapa2" class="btn btn-primary fw-bold fs-5 px-5 py-2" disabled onclick="concluirSeparacaoAlmoxarife()">
+          <i class="fa-solid fa-circle-check me-2"></i> Concluir Separação (Ir p/ Embarque)
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let itensCarregados = [];
+    let dadosTransferencia = {
+      idTransferencia: "",
+      origem: "",
+      destino: "",
+      status: "Em Conferencia",
+      almoxarife: "Almoxarife Ativo"
+    };
+
+    function colToIndex(col) {
+      let sum = 0;
+      for (let i = 0; i < col.length; i++) {
+        sum *= 26;
+        sum += col.charCodeAt(i) - 'A'.charCodeAt(0) + 1;
+      }
+      return sum - 1;
+    }
+
+    function processarArquivoXLSX() {
+      const fileInput = document.getElementById('fileExcel');
+      if (!fileInput.files.length) {
+        alert("Por favor, escolha o arquivo Excel exportado do seu ERP antes de iniciar!");
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        try {
+          let data = new Uint8Array(e.target.result);
+          let workbook = XLSX.read(data, { type: 'array' });
+          let sheetName = workbook.SheetNames[0];
+          let worksheet = workbook.Sheets[sheetName];
+          let json = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+
+          carregarMatrizDados(json, file.name);
+        } catch (err) {
+          alert("Erro ao processar arquivo: " + err.message);
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    function carregarExemploTeste() {
+      document.getElementById('transfNumber').value = "TR-1916623";
+      document.getElementById('transfOrigem').value = "277 BRU - LABORATORIO BOM";
+      document.getElementById('transfDestino').value = "1.088,00 JBA - FERRAMENTAL";
+
+      dadosTransferencia.idTransferencia = "TR-1916623";
+      dadosTransferencia.origem = "277 BRU - LABORATORIO BOM";
+      dadosTransferencia.destino = "1.088,00 JBA - FERRAMENTAL";
+
+      itensCarregados = [
+        { id: 1, codigo: "TEUG0442Z", descricao: "VENTILADOR PAREDE 60CM PRETO", lote: "032951", qtdSistema: 1, qtdConferida: "", observacao: "", fotos: [] },
+        { id: 2, codigo: "TEUG0442Z", descricao: "VENTILADOR PAREDE 60CM PRETO", lote: "032952", qtdSistema: 1, qtdConferida: "", observacao: "", fotos: [] },
+        { id: 3, codigo: "TEUG0442Z", descricao: "VENTILADOR PAREDE 60CM PRETO", lote: "032954", qtdSistema: 1, qtdConferida: "", observacao: "", fotos: [] },
+        { id: 4, codigo: "TEUG0442Z", descricao: "VENTILADOR PAREDE 60CM PRETO", lote: "032963", qtdSistema: 1, qtdConferida: "", observacao: "", fotos: [] }
+      ];
+
+      renderizarTabelaItens();
+    }
+
+    function carregarMatrizDados(json, filename) {
+      if (!json || json.length < 2) {
+        alert("O arquivo selecionado está vazio!");
+        return;
+      }
+
+      const idxA = colToIndex("A");  
+      const idxC = colToIndex("C");  
+      const idxE = colToIndex("E");  
+      const idxY = colToIndex("Y");  
+      const idxZ = colToIndex("Z");  
+      const idxAC = colToIndex("AC");
+      const idxAD = colToIndex("AD");
+      const idxAF = colToIndex("AF");
+
+      let numTransfLimpo = "";
+      let origemVal = "";
+      let destinoVal = "";
+
+      for (let r = 0; r < json.length; r++) {
+        let row = json[r];
+        if (!row) continue;
+
+        let valA = String(row[idxA] || "").trim();
+        if (valA && valA !== "CODIGO" && valA !== "CÓDIGO") {
+          numTransfLimpo = valA.replace(/\./g, "").replace(/,.*/, "").replace(/[^\d]/g, "");
+          origemVal = String(row[idxC] || "").trim();
+          destinoVal = String(row[idxE] || "").trim();
+          if (numTransfLimpo) break;
+        }
+      }
+
+      if (!numTransfLimpo) {
+        numTransfLimpo = filename.replace(/\.[^/.]+$/, "");
+      }
+
+      document.getElementById('transfNumber').value = "TR-" + numTransfLimpo;
+      document.getElementById('transfOrigem').value = origemVal || "Origem ERP";
+      document.getElementById('transfDestino').value = destinoVal || "Destino ERP";
+
+      dadosTransferencia.idTransferencia = "TR-" + numTransfLimpo;
+      dadosTransferencia.origem = origemVal || "Origem ERP";
+      dadosTransferencia.destino = destinoVal || "Destino ERP";
+
+      itensCarregados = [];
+
+      for (let i = 1; i < json.length; i++) {
+        let row = json[i];
+        if (!row || row.length === 0) continue;
+
+        let cod = String(row[idxY] || "").trim();
+        let desc = String(row[idxZ] || "").trim();
+
+        if (!cod || cod === "CODIGO_PRODUTO" || cod === "CODIGO") continue;
+
+        let patVal = String(row[idxAD] || "").trim();
+        let loteVal = String(row[idxAF] || "").trim();
+        let patLoteExibicao = patVal || loteVal || "-";
+
+        let qtdRaw = String(row[idxAC] || "1").replace(/\./g, "").replace(",", ".");
+        let qtdVal = parseFloat(qtdRaw) || 1;
+
+        itensCarregados.push({
+          id: itensCarregados.length + 1,
+          codigo: cod,
+          descricao: desc,
+          lote: patLoteExibicao,
+          qtdSistema: qtdVal,
+          qtdConferida: "",
+          observacao: "",
+          fotos: []
+        });
+      }
+
+      if (itensCarregados.length === 0) {
+        alert("Aviso: Nenhum item localizado na coluna Y (CODIGO_PRODUTO). Verifique o arquivo!");
+        return;
+      }
+
+      renderizarTabelaItens();
+    }
+
+    function renderizarTabelaItens() {
+      const tbody = document.getElementById('tableItemsBody');
+      tbody.innerHTML = "";
+
+      document.getElementById('badgeTotalItens').innerText = "Total Itens: " + itensCarregados.length;
+
+      itensCarregados.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        
+        let statusIcon = '<i class="fa-solid fa-circle-xmark text-danger fs-5" title="Pendente"></i>';
+        if (item.qtdConferida !== "" && item.fotos.length > 0) {
+          statusIcon = '<i class="fa-solid fa-circle-check text-success fs-5" title="Auditado OK"></i>';
+        }
+
+        tr.innerHTML = `
+          <td class="text-center">${statusIcon}</td>
+          <td class="fw-bold text-info">${item.codigo}</td>
+          <td>${item.descricao}</td>
+          <td><span class="badge bg-dark border text-warning fs-6">${item.lote}</span></td>
+          <td class="text-center fw-bold fs-6">${item.qtdSistema}</td>
+          <td>
+            <input type="number" class="form-control input-dark text-center fw-bold fs-6" value="${item.qtdConferida}" onchange="atualizarQtd(${index}, this.value)">
+          </td>
+          <td>
+            <input type="text" class="form-control input-dark" placeholder="Avaria / Motivo..." value="${item.observacao}" onchange="atualizarObs(${index}, this.value)">
+          </td>
+          <td>
+            <div class="d-flex align-items-center">
+              <input type="file" id="photoInput_${index}" class="d-none" accept="image/*" capture="environment" onchange="adicionarFoto(${index}, this)">
+              <button class="btn btn-sm btn-outline-light me-2 fw-bold" onclick="document.getElementById('photoInput_${index}').click()">
+                <i class="fa-solid fa-camera text-warning me-1"></i> Foto
+              </button>
+              <div id="previewContainer_${index}" class="d-flex overflow-auto">
+                ${item.fotos.map(f => `<img src="${f}" class="photo-thumb">`).join('')}
+              </div>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      validarRequisitos100();
+    }
+
+    function atualizarQtd(index, val) {
+      itensCarregados[index].qtdConferida = val;
+      validarRequisitos100();
+      renderizarTabelaItens();
+    }
+
+    function atualizarObs(index, val) {
+      itensCarregados[index].observacao = val;
+      validarRequisitos100();
+    }
+
+    function adicionarFoto(index, input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          itensCarregados[index].fotos.push(e.target.result);
+          renderizarTabelaItens();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function validarRequisitos100() {
+      let todosValidos = true;
+      if (itensCarregados.length === 0) todosValidos = false;
+
+      for (let item of itensCarregados) {
+        if (item.qtdConferida === "" || item.fotos.length === 0) {
+          todosValidos = false;
+          break;
+        }
+      }
+
+      const btnConcluir = document.getElementById('btnConcluirEtapa2');
+      const badgeStatus = document.getElementById('badgeStatusAudit');
+
+      if (todosValidos) {
+        btnConcluir.removeAttribute('disabled');
+        badgeStatus.className = "badge bg-success fs-6";
+        badgeStatus.innerText = "100% Auditado com Fotos (Pronto p/ Envio)";
+      } else {
+        btnConcluir.setAttribute('disabled', 'disabled');
+        badgeStatus.className = "badge bg-danger fs-6";
+        badgeStatus.innerText = "Pendente 100% Fotos & Contagem";
+      }
+    }
+
+    function concluirSeparacaoAlmoxarife() {
+      alert("Separação Concluída e Gravada com Sucesso!");
+    }
+  </script>
+</body>
+</html>
