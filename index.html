@@ -146,7 +146,7 @@
 </head>
 <body>
 
-  <!-- ELEMENTOS OCULTOS PARA ENVIO SEGURO NATIVO -->
+  <!-- ELEMENTO OCULTO PARA ENVIO DE NATIVO DE EMERGENCIAL -->
   <iframe name="hiddenTargetFrame" id="hiddenTargetFrame" style="display:none;"></iframe>
   <form id="nativePostForm" action="" method="POST" target="hiddenTargetFrame" style="display:none;">
     <input type="hidden" name="payload" id="nativePayloadInput">
@@ -211,7 +211,7 @@
 
     <div class="tab-content" id="mainTabsContent">
 
-      <!-- TELA 1: ALMOXARIFE -->
+      <!-- TELA 1 -->
       <div class="tab-pane fade show active" id="panel-almoxarife" role="tabpanel">
         <div class="pro-card">
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -303,7 +303,7 @@
         </div>
       </div>
 
-      <!-- TELA 2: EXPEDIÇÃO -->
+      <!-- TELA 2 -->
       <div class="tab-pane fade" id="panel-expedicao" role="tabpanel">
         <div class="pro-card">
           <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-truck-ramp-box text-warning me-2"></i>Liberação de Carga & Transporte</h5>
@@ -340,7 +340,7 @@
         </div>
       </div>
 
-      <!-- TELA 3: ROMANEIO -->
+      <!-- TELA 3 -->
       <div class="tab-pane fade" id="panel-romaneio" role="tabpanel">
         <div class="pro-card">
           <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-file-signature text-info me-2"></i>Comprovação de Romaneio Assinado</h5>
@@ -626,6 +626,7 @@
       itensCarregados[index].observacao = val;
     }
 
+    // COMPRESSÃO RIGOROSA DA FOTO (30KB CADA)
     function adicionarFoto(index, input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -715,10 +716,10 @@
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
-      // Envio via Form Nativo Oculto
+      // Envio via formulário oculto
       enviarDadosViaFormNativo(scriptUrl, payload);
 
-      alert("SUCESSO: Transferência salva no Google Sheets e fotos enviadas para o Google Drive!");
+      alert("SUCESSO: Transferência e fotos enviadas para o Google Sheets e Google Drive!");
       limparTelaEAtualizar();
     }
 
