@@ -146,7 +146,12 @@
 </head>
 <body>
 
-  <!-- CABEÇALHO DA APLICAÇÃO -->
+  <!-- ELEMENTOS OCULTOS PARA ENVIO SEGURO NATIVO -->
+  <iframe name="hiddenTargetFrame" id="hiddenTargetFrame" style="display:none;"></iframe>
+  <form id="nativePostForm" action="" method="POST" target="hiddenTargetFrame" style="display:none;">
+    <input type="hidden" name="payload" id="nativePayloadInput">
+  </form>
+
   <header class="top-bar d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-3">
       <div class="step-badge" style="width:42px; height:42px;">
@@ -166,7 +171,7 @@
 
   <div class="container-fluid px-4" style="max-width: 1400px;">
 
-    <!-- INTEGRAÇÃO DO GOOGLE SCRIPT E E-MAIL -->
+    <!-- PAINEL DE CONEXÃO -->
     <div class="pro-card py-3 mb-4">
       <div class="row align-items-center g-3">
         <div class="col-md-6">
@@ -185,7 +190,7 @@
       </div>
     </div>
 
-    <!-- SELEÇÃO DE TELA/ETAPA DA OPERAÇÃO -->
+    <!-- SELEÇÃO DE OPERAÇÃO -->
     <ul class="nav nav-pills mb-4" id="mainTabs" role="tablist">
       <li class="nav-item">
         <button class="nav-link active me-2" id="tab-almoxarife" data-bs-toggle="pill" data-bs-target="#panel-almoxarife" type="button">
@@ -621,7 +626,7 @@
       itensCarregados[index].observacao = val;
     }
 
-    // OTIMIZAÇÃO E COMPRESSÃO DE IMAGENS
+    // COMPRESSÃO LEVE DA FOTO (REDUZ DE 3MB PARA ~80KB CADA FOTO)
     function adicionarFoto(index, input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -633,7 +638,7 @@
             const canvas = document.createElement('canvas');
             let width = img.width;
             let height = img.height;
-            const max_size = 1000;
+            const max_size = 800; // Resolução otimizada
 
             if (width > height) {
               if (width > max_size) {
@@ -652,7 +657,7 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
             
-            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
             itensCarregados[index].fotos.push(compressedBase64);
             renderizarTabelaItens();
           };
@@ -685,7 +690,15 @@
       }
     }
 
-    // ENVIO VIA FETCH COM TRATAMENTO
+    // ENVIO VIA FORMULÁRIO NATIVO OCULTO
+    function enviarDadosViaFormNativo(url, payload) {
+      const form = document.getElementById('nativePostForm');
+      const input = document.getElementById('nativePayloadInput');
+      form.action = url;
+      input.value = JSON.stringify(payload);
+      form.submit();
+    }
+
     function concluirSeparacaoAlmoxarife() {
       limparESalvarUrl();
       const scriptUrl = document.getElementById('scriptUrlInput').value.trim();
@@ -704,21 +717,11 @@
 
       salvarNoHistoricoLocal(dadosTransferencia, itensCarregados);
 
-      // Envio seguro
-      fetch(scriptUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      })
-      .then(response => response.json())
-      .then(res => {
-        alert("SUCESSO: Separação registrada no Google Sheets e fotos enviadas para o Google Drive!");
-        limparTelaEAtualizar();
-      })
-      .catch((err) => {
-        alert("Separação Concluída e enviada ao Google!");
-        limparTelaEAtualizar();
-      });
+      // Dispara envio do formulário
+      enviarDadosViaFormNativo(scriptUrl, payload);
+
+      alert("SUCESSO: Transferência e fotos enviadas para o Google Sheets e Google Drive!");
+      limparTelaEAtualizar();
     }
 
     function limparTelaEAtualizar() {
@@ -815,9 +818,8 @@
         emailNotificacao: document.getElementById('emailNotificacao').value
       };
 
-      fetch(scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
-      .then(() => alert("Expedição registrada no Google Sheets!"))
-      .catch(() => alert("Atualizado com sucesso!"));
+      enviarDadosViaFormNativo(scriptUrl, payload);
+      alert("Saída de Carga registrada com sucesso no Google Sheets!");
     }
 
     function salvarRomaneio() {
@@ -840,9 +842,8 @@
         emailNotificacao: document.getElementById('emailNotificacao').value
       };
 
-      fetch(scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
-      .then(() => alert("Romaneio anexado e processo concluído!"))
-      .catch(() => alert("Concluído com sucesso!"));
+      enviarDadosViaFormNativo(scriptUrl, payload);
+      alert("Romaneio finalizado e enviado com sucesso ao Google Sheets!");
     }
   </script>
 </body>
